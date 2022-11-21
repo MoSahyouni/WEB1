@@ -1,0 +1,40 @@
+{
+  "name": "webapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "clean": "npm run clean:dist && rm -rf node_modules",
+    "clean:dist": "rm -rf dist",
+    "lint": "semistandard --verbose src/js/**/*.mjs | snazzy && lesshint --reporter lesshint-reporter-stylish src/styles",
+    "format": "semistandard --verbose --fix src/js/**/*.mjs | snazzy",
+    "test": "mocha",
+    "debug": "npm run html && npm run css && npm run js",
+    "build": "npm run debug && npm run minify",
+    "html": "mkdir -p dist && cp src/index.html dist/index.html",
+    "css": "mkdir -p dist && lessc src/styles/style.less dist/style.css",
+    "js": "mkdir -p dist && esbuild src/js/Main.mjs --log-level=warning --bundle --outfile=dist/bundle.js",
+    "minify": "npm run minify:css && npm run minify:js",
+    "minify:css": "lessc --clean-css dist/style.css dist/style.css",
+    "minify:js": "terser dist/bundle.js --compress --mangle --comments=false -o dist/bundle.js",
+    "start": "http-server dist",
+    "predebug": "npm run lint && npm run clean:dist"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "^0.15.15",
+    "eslint": "^8.28.0",
+    "less": "^4.1.3",
+    "less-plugin-clean-css": "^1.5.1",
+    "lesshint": "^6.3.7",
+    "lesshint-reporter-stylish": "^3.0.0",
+    "mocha": "^10.1.0",
+    "semistandard": "^16.0.1",
+    "snazzy": "^9.0.0",
+    "terser": "^5.15.1"
+  }
+}
