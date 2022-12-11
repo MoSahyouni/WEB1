@@ -1,8 +1,12 @@
-greet();
-alert();
-function alert () {
-  alert('hello');
-}
-function greet () {
-  document.querySelector('body').innerHTML = '<h1>hello world </h1>';
+import { loremIpsum, LoremIpsum } from 'lorem-ipsum';
+
+setInterval(addSentence, 1000);
+loremIpsum();
+
+function addSentence () {
+  const sentece = loremIpsum();
+
+  const span = document.createElement('span');
+  span.textContent = loremIpsum();
+  document.body.appendChild(span);
 }
