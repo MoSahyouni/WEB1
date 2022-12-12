@@ -2,24 +2,24 @@
   "name": "webapp",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.mjs",
   "directories": {
     "lib": "lib"
   },
   "scripts": {
     "clean": "npm run clean:dist && rm -rf node_modules",
     "clean:dist": "rm -rf dist",
-    "lint": "semistandard src/js//*.mjs && less --reporter less-reporter-stylish src/styles",
-    "format": "semistandard --fix src/js//*.mjs",
+    "lint": "semistandard *.mjs && semistandard src/js/*.mjs",
+    "format": "semistandard --fix *.mjs && semistandard --fix src/js/*.mjs",
     "debug": "npm run html && npm run css && npm run js",
     "build": "npm run debug && npm run minify",
     "html": "mkdir -p dist && cp src/index.html dist/index.html",
     "css": "mkdir -p dist && lessc src/styles/style.css dist/style.css",
-    "js": "mkdir -p dist && esbuild src/js/Main.mjs --log-level=warning --bundle --outfile=dist/bundle.js",
+    "js": "npm run lint && mkdir -p dist && esbuild src/js/Main.mjs --log-level=warning --bundle --outfile=dist/bundle.js",
     "minify": "npm run minify:css && npm run minify:js",
     "minify:css": "lessc --clean-css dist/style.css dist/style.css",
     "minify:js": "terser dist/bundle.js --compress --mangle --comments=false -o dist/bundle.js",
-    "start": "http-server dist"
+    "start": "node server.mjs"
   },
   "author": "",
   "license": "ISC",
@@ -37,6 +37,7 @@
     "terser": "^5.15.1"
   },
   "dependencies": {
+    "express": "^4.18.2",
     "lorem-ipsum": "^2.0.8"
   }
 }
