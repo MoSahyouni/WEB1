@@ -1,10 +1,3 @@
-import loremIpsum from 'lorem-ipsum';
 
-setInterval(addSentence, 1000);
-loremIpsum();
-
-function addSentence () {
-  const span = document.createElement('span');
-  span.textContent = loremIpsum();
-  document.body.appendChild(span);
-}
+document.getElementById('testMain').innerHTML = '<h1> Hello World</h1>' +
+'<p>das ist Probetext!! </p>';
