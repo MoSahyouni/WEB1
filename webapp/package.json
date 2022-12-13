@@ -9,7 +9,7 @@
   "scripts": {
     "clean": "npm run clean:dist && rm -rf node_modules && rm -rf package-lock.json",
     "clean:dist": "rm -rf dist",
-    "lint": "semistandard *.mjs && semistandard src/js/*.mjs",
+    "lint": "semistandard src/js/*.mjs",
     "format": "semistandard --fix *.mjs && semistandard --fix src/js/*.mjs",
     "debug": "npm run html && npm run css && npm run js",
     "build": "npm run debug && npm run minify",
@@ -19,7 +19,7 @@
     "minify": "npm run minify:css && npm run minify:js",
     "minify:css": "lessc --clean-css dist/style.css dist/style.css",
     "minify:js": "terser dist/bundle.js --compress --mangle --comments=false -o dist/bundle.js",
-    "start": "node server.mjs"
+    "start": "node src/js/server.mjs"
   },
   "author": "",
   "license": "ISC",
