@@ -7,7 +7,7 @@
     "lib": "lib"
   },
   "scripts": {
-    "clean": "npm run clean:dist && rm -rf node_modules",
+    "clean": "npm run clean:dist && rm -rf node_modules && rm -rf package-lock.json",
     "clean:dist": "rm -rf dist",
     "lint": "semistandard *.mjs && semistandard src/js/*.mjs",
     "format": "semistandard --fix *.mjs && semistandard --fix src/js/*.mjs",

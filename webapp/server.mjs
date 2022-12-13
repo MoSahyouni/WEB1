@@ -1,9 +1,14 @@
 import express from 'express';
-import path from 'path';
 const server = express();
 
-server.use(express.static(path.join(path.dirname(process.argv[1]), 'dist')));
-
+let port = 8080;
+if (process.argv.length >= 3) {
+  const argument = process.argv;
+  if (!isNaN(argument[2]) && argument[2] < 65536) { port = argument[2]; } else {
+    console.log('invaild input, server will be listening on port 8080');
+  }
+}
+server.use(express.static('dist'));
 server.get('/', (request, response) => {
   response.send('Hello, World!');
 });
@@ -15,4 +20,4 @@ server.get('/json', (request, response) => {
   });
 });
 
-server.listen(8080, console.log('server listing on port 8080'));
+server.listen(port, console.log('server listening on port ' + port.toString()));
