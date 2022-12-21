@@ -8,9 +8,14 @@ if (process.argv.length >= 3) {
     console.log('invaild input, server will be listening on port 8080');
   }
 }
+
 server.use(express.static('dist'));
 server.get('/', (request, response) => {
-  response.send('Hello, World!');
+  response.send('ih');
+});
+
+server.get('/anmelden', (request, response) => {
+  response.send('Anmelden');
 });
 
 server.get('/json', (request, response) => {
