@@ -9,8 +9,8 @@
   "scripts": {
     "clean": "npm run clean:dist && rm -rf node_modules && rm -rf package-lock.json",
     "clean:dist": "rm -rf dist",
-    "lint": "semistandard src/js/*.mjs",
-    "format": "semistandard --fix src/js/*.mjs && semistandard --fix Server/server.mjs",
+    "lint": "semistandard --verbose src/js/*.mjs | snazzy",
+    "format": "semistandard --fix --verbose src/js/*.mjs | snazzy && semistandard --fix Server/server.mjs",
     "debug": "npm run html && npm run css && npm run js",
     "build": "npm run debug && npm run minify",
     "html": "mkdir -p dist && cp src/index.html dist/index.html",
