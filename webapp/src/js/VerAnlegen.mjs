@@ -2,23 +2,19 @@
 function VerAnlegen () {
   console.log('Vera');
   document.getElementById('Main').innerHTML = `
-<ul id="list">
-    <li>Veranstaltung: <br><input id="vernin", type="text"></li>
-    <li>Raum Nr.: <br><input id="raumnr", type="text"></li>
+  <ul id="list">
+    <h2>Varanstaltung</h2>
+    <li>name: <br><input id="vernname", type="text"></li>
     <br>
     <button id="btnJSON" >Veranstaltung erstellen</button>
   </ul>
   <p id="userdata"></p>`;
-  const verNameInput = document.getElementById('vernin');
-  const raumNr = document.getElementById('raumnr');
+  const verNameInput = document.getElementById('vernname');
   const jsonButton = document.getElementById('btnJSON');
-  /* const nname = document.getElementById('nname');
-  const pass = document.getElementById('passw'); */
   const userdatatext = document.getElementById('userdata');
   jsonButton.addEventListener('click', function () {
     const user = {
-      Veranstaltung: verNameInput.value,
-      RaumNr: raumNr.value
+      Veranstaltung: verNameInput.value
     };
     userdatatext.innerHTML = JSON.stringify(user);
   });
