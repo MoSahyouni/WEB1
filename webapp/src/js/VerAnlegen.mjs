@@ -1,6 +1,5 @@
-
+import fetch from 'node-fetch';
 function VerAnlegen () {
-  console.log('Vera');
   document.getElementById('Main').innerHTML = `
   <ul id="list">
     <h2>Varanstaltung</h2>
@@ -11,12 +10,19 @@ function VerAnlegen () {
   <p id="userdata"></p>`;
   const verNameInput = document.getElementById('vernname');
   const jsonButton = document.getElementById('btnJSON');
-  const userdatatext = document.getElementById('userdata');
+  // const userdatatext = document.getElementById('userdata');
   jsonButton.addEventListener('click', function () {
-    const user = {
-      Veranstaltung: verNameInput.value
-    };
-    userdatatext.innerHTML = JSON.stringify(user);
+    (async function () {
+      fetch('/veranstaltungerzeugen', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ vername: verNameInput.value })
+      }).then(response => {
+        if (response) { return response.json(); }
+      });
+    })();
   });
 }
 export default VerAnlegen;
