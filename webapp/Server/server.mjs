@@ -46,7 +46,49 @@ server.post('/veranstaltungerzeugen', async (req, res) => {
     const db = client.db('DatenBank');
     const veranstaltungen = db.collection('veranstaltungen');
     const result = await veranstaltungen.insertOne({
-      veranstaltung: req.body.vername
+      veranstaltung: req.body.name,
+      datum: req.body.datum
+    });
+
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occured while creating the event' });
+  } finally {
+    client.close();
+  }
+});
+
+/* server.post('/gasterzeugen', async (req, res) => {
+  const client = new MongoClient('mongodb://localhost:27017');
+  try {
+    await client.connect();
+    const db = client.db('DatenBank');
+    const gäste = db.collection('Gäste');
+    const result = await gäste.insertMany({
+      name: req.body.name,
+      kind: req.body.kind,
+      status: req.body.status
+    });
+    console.log(req.body);
+
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occured while creating the event' });
+  } finally {
+    client.close();
+  }
+}); */
+server.post('/gasterzeugen', async (req, res) => {
+  const client = new MongoClient('mongodb://localhost:27017');
+  try {
+    await client.connect();
+    const db = client.db('DatenBank');
+    const gäste = db.collection('Gäste');
+    const result = await gäste.insertOne({
+      veranvaeranstaltungsname: req.body.veranvaeranstaltungsname,
+      gästeliste: req.body.Gästelist
     });
 
     res.json(result);

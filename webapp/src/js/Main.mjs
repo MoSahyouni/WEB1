@@ -1,4 +1,5 @@
 import VerAnlegen from './VerAnlegen.mjs';
+import gaestelistAnliegen from './gastliste.mjs';
 const verAn = VerAnlegen;
 const header = document.getElementById('bodyheader');
 header.innerHTML = '<h2>Veranstaltungsplanner</h2>';
@@ -26,5 +27,16 @@ btn2.addEventListener('click', () => {
   ButtonBack();
   verAn();
 });
+const gastlistErstellen = document.createElement('button');
+gastlistErstellen.textContent = 'Gaestelist erstellen';
+gastlistErstellen.setAttribute('id', 'gserstellen');
+gastlistErstellen.addEventListener('click', () => {
+  ButtonBack();
+  gaestelistAnliegen();
+});
+
+const br = document.createElement('br');
 main.appendChild(btn2);
 main.appendChild(btn);
+main.appendChild(br);
+main.appendChild(gastlistErstellen);
