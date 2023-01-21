@@ -121,7 +121,6 @@ function gaestelistAnliegen () {
         gastinfomsg.innerText = 'name: ' + gastinfo.name + ', kind: ' + gastinfo.kind + ', status: ' + gastinfo.status;
         const neuegastinputs = document.createElement('ul');
         neuegastinputs.innerHTML = `
-        <li> bitte alle eingaben neu eingeben </li>
         <li>name: <br><input id="neugastname", type="text"  ></li>
         <li>Kind: <br><select name="neugastkind" id="neugastkind"  multiple>
                         <option>Ja</option>
