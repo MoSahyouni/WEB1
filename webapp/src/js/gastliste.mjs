@@ -48,73 +48,81 @@ function gaestelistAnliegen () {
     if (requiredFields === false) { window.alert('bitte alle Felder ausfühlen'); } else {
       const gast = { name: gastname.value, kind: gastkind.value, status: gaststatus.value };
       GaesteList.push(gast);
-      for (let n = 0; n < GaesteList.length; n++) {
-        const listanzeigerChildren = listanzeiger.children.length;
-        const g = GaesteList[n];
-        const obj = document.createElement('li');
-        const gname = g.name;
-        const gkind = g.kind;
-        const gstatus = g.status;
-        const objname = document.createElement('a');
-        objname.innerText = 'Gast Nr.: ' + (n + 1) + 'name: ' + gname + ', ';
-        const objkind = document.createElement('a');
-        objkind.innerText = 'kind: ' + gkind + ', ';
-        const objstatus = document.createElement('a');
-        objstatus.innerText = 'status: ' + gstatus + ', ';
-        obj.appendChild(objname);
-        // obj.appendChild(br);
-        obj.appendChild(objkind);
-        // obj.appendChild(br);
-        obj.appendChild(objstatus);
-
-        if (n >= listanzeigerChildren) { listanzeiger.appendChild(obj); }
-      }
+      if (listanzeiger.children.length > 0) { removeListanzigerchildren(); }
+      gaestelistPrint(GaesteList);
     }
     if (gasteAnzahl === 0 && GaesteList.length !== 0) {
+      gasteAnzahl++;
       const gastlisbtn = document.createElement('button');
       gastlisbtn.innerText = 'Gästelist erstellen';
+      gaestelistanzeiger.appendChild(gastlisbtn);
       gastlisbtn.addEventListener('click', function (event) {
         event.preventDefault();
+        // Check if the event exists
+        let erg = false;
         (async function () {
-          await fetch('/gasterzeugen', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ veranvaeranstaltungsname: vaeranstaltungsname.value, Gästelist: GaesteList })
-          }).then(response => {
-            if (response) { return response.json(); }
-          }).catch(error => {
-            console.log(error);
-          });
+          const response = await
+          fetch('/getveranstaltung');
+          const result = await response.json();
+          const vers = result;
+          let veri = null;
+          for (let i = 0; i < vers.length; i++) {
+            if (vaeranstaltungsname.value === vers[i].veranstaltung) {
+              console.log('------');
+              erg = true;
+              veri = vers[i];
+            }
+          }
+          // Veranstaltung fetching to Server
+          if (!erg) {
+            window.alert('Es existiert keine Veranstaltung mit dem gegebenen Namen');
+            console.log(vaeranstaltungsname.value);
+          } else {
+            if (veri.gaestelist != null) { window.alert('Es existiert eine Gästeliste für diese Veranstaltung'); } else {
+              (async function () {
+                await fetch('/gasterzeugen', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({ veranvaeranstaltungsname: vaeranstaltungsname.value, Gästelist: GaesteList })
+                }).then(response => {
+                  if (response) { return response.json(); }
+                }).catch(error => {
+                  console.log(error);
+                });
+              })();
+            }
+          }
         })();
       });
-      gaestelistanzeiger.appendChild(gastlisbtn);
     }
-    gasteAnzahl++;
-    if (gasteAnzahl === 1) { gastbearbeiten(); }
+
+    if (gasteAnzahl === 1) { gastbearbeiten(); gasteAnzahl++; }
   });
   function gastbearbeiten () {
     const gbearbeitendiv = document.createElement('div');
+    gbearbeitendiv.setAttribute('id', 'gbearbeitendiv');
     const gbearbeitenMsg = document.createElement('h4');
     gbearbeitenMsg.innerText = 'Gast NR.';
-    const gbearbeitenMsg2 = document.createElement('h4');
-    gbearbeitenMsg2.innerText = 'bearbeiiten';
     const gastNrinput = document.createElement('input');
     const gastbearbeitenbutton = document.createElement('button');
-    gastbearbeitenbutton.innerText = 'Gast bearbeiten';
+    gastbearbeitenbutton.innerText = 'bearbeiten';
+    gastbearbeitenbutton.setAttribute('id', 'gastbearbeitenbutton');
+    const gastloeschenbutton = document.createElement('button');
+    gastloeschenbutton.innerText = 'löschen';
+    gastloeschenbutton.setAttribute('id', 'gastloeschenbutton');
     gbearbeitendiv.appendChild(gbearbeitenMsg);
     gbearbeitendiv.appendChild(gastNrinput);
-    gbearbeitendiv.appendChild(gbearbeitenMsg2);
     gbearbeitendiv.appendChild(document.createElement('br'));
     gbearbeitendiv.appendChild(gastbearbeitenbutton);
-    Main.append(gbearbeitendiv);
+    gbearbeitendiv.appendChild(gastloeschenbutton);
+    Main.appendChild(gbearbeitendiv);
     gastbearbeitenbutton.addEventListener('click', function () {
-      if (gastNrinput.value === '' && !isNaN(gastNrinput.value)) { window.alert('bitte GastNr. eingeben.'); } else {
+      if (gastNrinput.value === '' || isNaN(gastNrinput.value) || gastNrinput.value > GaesteList.length) { window.alert('bitte GastNr. eingeben.'); } else {
         const gastnr = gastNrinput.value;
         gbearbeitenMsg.remove();
         gastNrinput.remove();
-        gbearbeitenMsg2.remove();
         gastbearbeitenbutton.remove();
         const gastinfo = GaesteList[gastnr - 1];
         const gastinfomsg = document.createElement('a');
@@ -149,35 +157,75 @@ function gaestelistAnliegen () {
 
           GaesteList[gastnr - 1] = gastinfo;
           gbearbeitendiv.remove();
-          while (listanzeiger.hasChildNodes()) {
-            listanzeiger.removeChild(listanzeiger.children[0]);
-          }
-
-          for (let n = 0; n < GaesteList.length; n++) {
-            const listanzeigerChildren = listanzeiger.children.length;
-            const g = GaesteList[n];
-            const obj = document.createElement('li');
-            const gname = g.name;
-            const gkind = g.kind;
-            const gstatus = g.status;
-            const objname = document.createElement('a');
-            objname.innerText = 'Gast Nr.: ' + (n + 1) + 'name: ' + gname + ', ';
-            const objkind = document.createElement('a');
-            objkind.innerText = 'kind: ' + gkind + ', ';
-            const objstatus = document.createElement('a');
-            objstatus.innerText = 'status: ' + gstatus + ', ';
-            obj.appendChild(objname);
-            // obj.appendChild(br);
-            obj.appendChild(objkind);
-            // obj.appendChild(br);
-            obj.appendChild(objstatus);
-
-            if (n >= listanzeigerChildren) { listanzeiger.appendChild(obj); }
-          }
+          removeListanzigerchildren();
+          // hier
+          gaestelistPrint(GaesteList);
           gastbearbeiten();
         });
       }
     });
+    gastloeschenbutton.addEventListener('click', function () {
+      if (gastNrinput.value === '' || isNaN(gastNrinput.value) || gastNrinput.value > GaesteList.length) { window.alert('bitte GastNr. eingeben.'); } else {
+        const gastnr = gastNrinput.value;
+
+        // hier
+        removeListanzigerchildren();
+        GaesteList.splice(gastnr - 1, 1);
+        console.log('sli');
+        console.log('_____________________');
+        console.log(GaesteList);
+        gaestelistPrint(GaesteList);
+      // gastbearbeiten();
+      }
+    });
+  }
+  /* async function VerExis (name) {
+    let erg = false;
+
+    const response = await
+    fetch('/getveranstaltung');
+    const result = await response.json();
+    const vers = result;
+    for (let i = 0; i < vers.length; i++) {
+      if (name === vers[i].veranstaltung) {
+        console.log('------');
+        erg = true;
+      }
+    }
+    console.log(erg);
+    return erg;
+  } */
+  function gaestelistPrint (gl) {
+    for (let n = 0; n < gl.length; n++) {
+      // const listanzeigerChildren = listanzeiger.children.length;
+      const g = gl[n];
+      if (n >= 1 && g.name === gl[n - 1].name && g.kind === gl[n - 1].kind) {
+        gl.splice(n, 1); n--;
+      } else {
+        const obj = document.createElement('li');
+        const gname = g.name;
+        const gkind = g.kind;
+        const gstatus = g.status;
+        const objname = document.createElement('a');
+        objname.innerText = 'Gast Nr.' + (n + 1) + ': name: ' + gname + ', ';
+        const objkind = document.createElement('a');
+        objkind.innerText = 'kind: ' + gkind + ', ';
+        const objstatus = document.createElement('a');
+        objstatus.innerText = 'status: ' + gstatus;
+        obj.appendChild(objname);
+        // obj.appendChild(br);
+        obj.appendChild(objkind);
+        // obj.appendChild(br);
+        obj.appendChild(objstatus);
+        console.log(listanzeiger.children[n]);
+        listanzeiger.appendChild(obj);
+
+        // if (n >= listanzeigerChildren) { listanzeiger.appendChild(obj); }
+      }
+    }
+  }
+  function removeListanzigerchildren () {
+    listanzeiger.innerHTML = '';
   }
 }
 

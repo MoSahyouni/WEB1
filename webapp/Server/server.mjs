@@ -53,10 +53,30 @@ server.post('/veranstaltungerzeugen', async (req, res) => {
     res.json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'An error occured while creating the event' });
+    res.status(500).json({ error: 'Error while creating the event' });
   } finally {
     client.close();
   }
+});
+// const router = express.Router();
+server.get('/getveranstaltung', (req, res) => {
+  (async function () {
+    const client2 = new MongoClient('mongodb://localhost:27017');
+    try {
+      await client2.connect();
+      const dbo = client2.db('DatenBank');
+      const collection = dbo.collection('veranstaltungen');
+      const vers = await collection.find().toArray();
+
+      const result = vers;
+
+      res.json(result);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      client2.close();
+    }
+  })();
 });
 
 /* server.post('/gasterzeugen', async (req, res) => {
@@ -89,6 +109,18 @@ server.post('/gasterzeugen', async (req, res) => {
     const result = await gäste.insertOne({
       veranvaeranstaltungsname: req.body.veranvaeranstaltungsname,
       gästeliste: req.body.Gästelist
+    });
+
+    MongoClient.connect('mongodb://localhost:27017', function (err, db) {
+      if (err) throw err;
+      const dbo = db.db('DatenBank');
+      const Ver = { veranstaltung: req.body.veranvaeranstaltungsname };
+      const newvalues = { $set: { gaestelist: req.body.Gästelist } };
+      dbo.collection('veranstaltungen').updateOne(Ver, newvalues, function (err, res) {
+        if (err) throw err;
+        console.log('veranstaltung updated');
+        db.close();
+      });
     });
 
     res.json(result);

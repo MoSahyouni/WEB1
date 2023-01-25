@@ -13,6 +13,8 @@ function ButtonBack () {
   });
 }
 const main = document.getElementsByClassName('Main')[0];
+const mainDiv = document.createElement('div');
+mainDiv.setAttribute('id', 'mainSeiteDiv');
 const btn = document.createElement('button');
 btn.textContent = ' meine Veransaltungen';
 btn.setAttribute('id', 'btn');
@@ -35,8 +37,9 @@ gastlistErstellen.addEventListener('click', () => {
   gaestelistAnliegen();
 });
 
-const br = document.createElement('br');
-main.appendChild(btn2);
-main.appendChild(btn);
-main.appendChild(br);
-main.appendChild(gastlistErstellen);
+// const br = document.createElement('br');
+main.appendChild(mainDiv);
+mainDiv.appendChild(btn2);
+mainDiv.appendChild(btn);
+// main.appendChild(br);
+mainDiv.appendChild(gastlistErstellen);

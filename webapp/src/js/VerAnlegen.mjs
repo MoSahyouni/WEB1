@@ -21,16 +21,43 @@ function VerAnlegen () {
     if (verNameInput.value === '') { requiredFields = false; }
     if (verTime.value === '') { requiredFields = false; }
     if (requiredFields === false) { window.alert('bitte alle Felder ausfühlen'); } else {
+      let vers = [];
+      let altename = false;
+
       (async function () {
-        await fetch('/veranstaltungerzeugen', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ name: verNameInput.value, datum: verTime.value })
-        }).then(response => {
-          if (response) { return response.json(); }
-        });
+        try {
+          const response = await
+          fetch('/getveranstaltung');
+          const result = await response.json();
+          vers = result;
+          for (let i = 0; i < vers.length; i++) {
+            if (verNameInput.value === vers[i].veranstaltung) {
+              altename = true;
+              window.alert('Veranstaltungsname existiert schon, bitte name ändern.');
+
+              break;
+            }
+          }
+          if (!altename) {
+            console.log('geht weiter......');
+
+            (async function () {
+              await fetch('/veranstaltungerzeugen', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name: verNameInput.value, datum: verTime.value })
+              }).then(response => {
+                if (response) { return response.json(); }
+              });
+            })();
+            window.alert('Veranstaltung erstellt');
+          }
+        } catch (error) {
+          console.log('Er....');
+          console.error(error.message);
+        }
       })();
     }
   });
