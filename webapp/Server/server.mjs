@@ -45,9 +45,15 @@ server.post('/veranstaltungerzeugen', async (req, res) => {
     await client.connect();
     const db = client.db('DatenBank');
     const veranstaltungen = db.collection('veranstaltungen');
+    const Splan = db.collection('Sitzpläne');
+    await Splan.insertOne({
+      verastaltungsname: req.body.name,
+      Sitzplan: req.body.sitzplan
+    });
     const result = await veranstaltungen.insertOne({
       veranstaltung: req.body.name,
-      datum: req.body.datum
+      datum: req.body.datum,
+      Sitzplan: req.body.sitzplan
     });
 
     res.json(result);

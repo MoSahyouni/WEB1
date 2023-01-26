@@ -124,6 +124,7 @@ function gaestelistAnliegen () {
         gbearbeitenMsg.remove();
         gastNrinput.remove();
         gastbearbeitenbutton.remove();
+        gastloeschenbutton.remove();
         const gastinfo = GaesteList[gastnr - 1];
         const gastinfomsg = document.createElement('a');
         gastinfomsg.innerText = 'name: ' + gastinfo.name + ', kind: ' + gastinfo.kind + ', status: ' + gastinfo.status;

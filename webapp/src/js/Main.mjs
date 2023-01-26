@@ -1,5 +1,7 @@
 import VerAnlegen from './VerAnlegen.mjs';
 import gaestelistAnliegen from './gastliste.mjs';
+import GaestePlatzZuordnen from './SitzplanZuordnungAnliegen.mjs';
+import testfun from './test.mjs';
 const verAn = VerAnlegen;
 const header = document.getElementById('bodyheader');
 header.innerHTML = '<h2>Veranstaltungsplanner</h2>';
@@ -36,6 +38,20 @@ gastlistErstellen.addEventListener('click', () => {
   ButtonBack();
   gaestelistAnliegen();
 });
+const gaesteplaetzeZuordnen = document.createElement('button');
+gaesteplaetzeZuordnen.textContent = 'Sitzplätze zuordnen';
+gaesteplaetzeZuordnen.setAttribute('id', 'Sitzplätzezuordnen');
+gaesteplaetzeZuordnen.addEventListener('click', () => {
+  ButtonBack();
+  GaestePlatzZuordnen();
+});
+
+const testb = document.createElement('button');
+testb.textContent = 'window size Monitor';
+testb.addEventListener('click', () => {
+  ButtonBack();
+  testfun();
+});
 
 // const br = document.createElement('br');
 main.appendChild(mainDiv);
@@ -43,3 +59,5 @@ mainDiv.appendChild(btn2);
 mainDiv.appendChild(btn);
 // main.appendChild(br);
 mainDiv.appendChild(gastlistErstellen);
+mainDiv.appendChild(gaesteplaetzeZuordnen);
+mainDiv.appendChild(testb);
