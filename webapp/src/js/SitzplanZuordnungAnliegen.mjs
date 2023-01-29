@@ -1,7 +1,5 @@
 import fetch from 'node-fetch';
 function GaestePlatzZuordnen () {
-  const header = document.getElementById('bodyheader');
-  const headerHtml = header.innerHTML;
   const main = document.getElementById('Main');
   main.innerHTML = `
   <ul id="list">
@@ -65,12 +63,12 @@ function GaestePlatzZuordnen () {
             const zuordnendiv = document.getElementById('zuordnendiv');
 
             gaestelistPrint(gl, glanzeiger);
-            plgastordnerlistPrint(rTische, sitzeProTisch, bestuhlung, plgastordnerlist, verName.value, headerHtml);
+            plgastordnerlistPrint(rTische, sitzeProTisch, bestuhlung, plgastordnerlist, verName.value);
             zuordnenFun(platzlist, zuordnendiv, plgastordnerlist, rTische, sitzeProTisch);
 
             window.addEventListener('resize', function () {
               gaestelistPrint(gl, glanzeiger);
-              plgastordnerlistPrint(rTische, sitzeProTisch, bestuhlung, plgastordnerlist, verName.value, headerHtml);
+              plgastordnerlistPrint(rTische, sitzeProTisch, bestuhlung, plgastordnerlist, verName.value);
               zuordnenFun(platzlist, zuordnendiv, plgastordnerlist, rTische, sitzeProTisch);
             });
           }
@@ -226,10 +224,14 @@ function GaestePlatzZuordnen () {
     allePlatze();
     spDiv.appendChild(splist);
   } */
-  function plgastordnerlistPrint (rTische, sitzeProTisch, bestuhlung, plgastordnerlist, vername, headerHtml) {
-    const bodyHeader = document.getElementById('bodyheader');
-    bodyHeader.innerHTML = headerHtml + '<h5>  für die Veranstaltung ' + vername + ' gibt es ' + rTische +
-      ' Tische und ' + sitzeProTisch + ' Sitzplatz pro Tisch. Tische haben ' + bestuhlung + ' bestuhlung.';
+  function plgastordnerlistPrint (rTische, sitzeProTisch, bestuhlung, plgastordnerlist, vername) {
+    const header = document.getElementById('bodyheader');
+    header.innerHTML = '<h5 id="back">zurück</h5><h2>Veranstaltungsplanner</h2>' + '<h5>  für die Veranstaltung ' + vername + ' gibt es ' + rTische +
+    ' Tische und ' + sitzeProTisch + ' Sitzplatz pro Tisch. Tische haben ' + bestuhlung + ' bestuhlung.';
+    const btnBack = document.getElementById('back');
+    btnBack.addEventListener('click', () => {
+      window.location.reload();
+    });
   }
   let aktuellSeitePL = 1;
   function zuordnenFun (pl, myDiv, plgastordnerlist, rTische, sitzeProTisch) {
