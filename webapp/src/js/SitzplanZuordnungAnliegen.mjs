@@ -43,6 +43,8 @@ function GaestePlatzZuordnen () {
             window.alert('Es existiert keine Veranstaltung mit dem gegebenen Namen');
           } else {
             const gl = ver.gaestelist;
+            // veranstaltung = Name in Database
+            const veranstalungName = ver.veranstaltung;
             rTische = ver.Sitzplan.recheckigenTische;
             sitzeProTisch = ver.Sitzplan.sitzeprotisch;
             bestuhlung = ver.Sitzplan.Bestuhlung;
@@ -52,9 +54,7 @@ function GaestePlatzZuordnen () {
               platzlist.push(null);
               plgastordnerlist.push(null);
             } */
-            console.log(rTische);
-            console.log(bestuhlung);
-            console.log(platzlist);
+
             // const sp = ver.Sitzplan;
             main.innerHTML = `<div id="gaestelistanzeiger"></div>
               <div id="sitzplananzeiger"></div>
@@ -64,12 +64,12 @@ function GaestePlatzZuordnen () {
 
             gaestelistPrint(gl, glanzeiger);
             plgastordnerlistPrint(rTische, sitzeProTisch, bestuhlung, plgastordnerlist, verName.value);
-            zuordnenFun(platzlist, zuordnendiv, plgastordnerlist, rTische, sitzeProTisch);
+            zuordnenFun(platzlist, zuordnendiv, plgastordnerlist, rTische, sitzeProTisch, bestuhlung, gl, veranstalungName);
 
             window.addEventListener('resize', function () {
               gaestelistPrint(gl, glanzeiger);
               plgastordnerlistPrint(rTische, sitzeProTisch, bestuhlung, plgastordnerlist, verName.value);
-              zuordnenFun(platzlist, zuordnendiv, plgastordnerlist, rTische, sitzeProTisch);
+              zuordnenFun(platzlist, zuordnendiv, plgastordnerlist, rTische, sitzeProTisch, bestuhlung, gl, veranstalungName);
             });
           }
         } catch (error) {
@@ -85,7 +85,6 @@ function GaestePlatzZuordnen () {
 
     myDiv.appendChild(block); const blockHeight = block.clientHeight;
     block.remove();
-    console.log(blockHeight);
     // pagination aktuelle Seite
     // let aktuellSeite = 1;
     myDiv.innerHTML = '';
@@ -234,12 +233,11 @@ function GaestePlatzZuordnen () {
     });
   }
   let aktuellSeitePL = 1;
-  function zuordnenFun (pl, myDiv, plgastordnerlist, rTische, sitzeProTisch) {
+  function zuordnenFun (pl, myDiv, plgastordnerlist, rTische, sitzeProTisch, bestuhlung, gastelist, veranstalungName) {
     const block = document.createElement('li');
     block.innerHTML = 'platz Nr.n: sitzt den Gast Nr.:<input><button>speicher Platz</button>';
 
     myDiv.appendChild(block); const blockHeight = block.clientHeight;
-    console.log(blockHeight);
     // pagination aktuelle Seite
     // let aktuellSeite = 1;
     myDiv.innerHTML = '';
@@ -266,9 +264,9 @@ function GaestePlatzZuordnen () {
     if (isNaN(anzpages)) { anzpages = pl.length; }
     if (anzpages * wHeight / blockHeight < pl.length) { anzpages++; }
     if (aktuellSeitePL > anzpages) { aktuellSeitePL = anzpages; }
-    if (aktuellSeitePL !== 1) { PlatzeInputs(aktuellSeitePL, pl, mylist, anzitemproSeite, plgastordnerlist); } else {
+    if (aktuellSeitePL !== 1) { PlatzeInputs(aktuellSeitePL, pl, mylist, anzitemproSeite, plgastordnerlist, rTische, sitzeProTisch, bestuhlung, gastelist, veranstalungName); } else {
       aktuellSeitePL = 1;
-      PlatzeInputs(aktuellSeitePL, pl, mylist, anzitemproSeite, plgastordnerlist, rTische, sitzeProTisch);
+      PlatzeInputs(aktuellSeitePL, pl, mylist, anzitemproSeite, plgastordnerlist, rTische, sitzeProTisch, bestuhlung, gastelist, veranstalungName);
     }
     rarrow.addEventListener('click', function () {
       if (!(aktuellSeitePL === anzpages)) {
@@ -278,7 +276,7 @@ function GaestePlatzZuordnen () {
         plMsg.innerText = 'Bitte geben Sie der Nummer des Gasts ein : ';
         paginationPage.innerText = aktuellSeitePL + '/ ' + anzpages;
         mylist.appendChild(plMsg);
-        PlatzeInputs(aktuellSeitePL, pl, mylist, anzitemproSeite, plgastordnerlist, rTische, sitzeProTisch);
+        PlatzeInputs(aktuellSeitePL, pl, mylist, anzitemproSeite, plgastordnerlist, rTische, sitzeProTisch, bestuhlung, gastelist, veranstalungName);
       }
     });
     larrow.addEventListener('click', function () {
@@ -289,7 +287,7 @@ function GaestePlatzZuordnen () {
         plMsg.innerText = 'Bitte geben Sie der Nummer des Gasts ein : ';
         paginationPage.innerText = aktuellSeitePL + '/ ' + anzpages;
         mylist.appendChild(plMsg);
-        PlatzeInputs(aktuellSeitePL, pl, mylist, anzitemproSeite, plgastordnerlist, rTische, sitzeProTisch);
+        PlatzeInputs(aktuellSeitePL, pl, mylist, anzitemproSeite, plgastordnerlist, rTische, sitzeProTisch, bestuhlung, gastelist, veranstalungName);
       }
     });
     const paginationPage = document.createElement('a');
@@ -299,23 +297,18 @@ function GaestePlatzZuordnen () {
     myDiv.appendChild(paginationPage);
     myDiv.appendChild(rarrow);
   }
-  function PlatzeInputs (pageNr, pl, mylist, anzitemproSeite, plgastordnerlist, rTische, sitzeProTisch) {
+  function PlatzeInputs (pageNr, pl, mylist, anzitemproSeite, plgastordnerlist, rTische, sitzeProTisch, bestuhlung, gaestelist, veranstalungName) {
     // const aktSitzPlatz = 1;
     let aktTisch = 1;
+    let aktPlatz = 1;
     for (let n = (pageNr - 1) * anzitemproSeite; n < pl.length && n < pageNr * anzitemproSeite; n++) {
-      // const listanzeigerChildren = listanzeiger.children.length;
-
-      // const g = pl[n];
-      // if (n >= 1 && g.name === gl[n - 1].name && g.kind === gl[n - 1].kind) {
-      //  gl.splice(n, 1); n--;
-      // } else {
       const obj = document.createElement('li');
       const objinput = document.createElement('input');
       objinput.setAttribute('id', 'plgsinput' + n);
       if (plgastordnerlist[n] != null) {
         aktTisch = parseInt(n / sitzeProTisch) + 1;
-        let aktPlatz = parseInt((n + 1) - (aktTisch * 4));
-        if (aktPlatz <= 0) { aktPlatz += 4; }
+        let aktPlatz = parseInt((n + 1) - (aktTisch * sitzeProTisch));
+        if (aktPlatz <= 0) { aktPlatz += parseInt(sitzeProTisch); }
         obj.innerText = 'Tisch Nr. ' + aktTisch + ', platz Nr. ' + aktPlatz + ' besitzt von Gast Nr. ' + plgastordnerlist[n];
         obj.setAttribute('id', 'p' + n);
         const gastloschen = document.createElement('button');
@@ -325,12 +318,12 @@ function GaestePlatzZuordnen () {
         gastloschen.addEventListener('click', function () {
           plgastordnerlist[n] = null;
           mylist.innerHTML = '';
-          PlatzeInputs(pageNr, pl, mylist, anzitemproSeite, plgastordnerlist, rTische, sitzeProTisch);
+          PlatzeInputs(pageNr, pl, mylist, anzitemproSeite, plgastordnerlist, rTische, sitzeProTisch, bestuhlung, gaestelist, veranstalungName);
         });
       } else {
         aktTisch = parseInt(n / sitzeProTisch) + 1;
-        let aktPlatz = parseInt((n + 1) - (aktTisch * 4));
-        if (aktPlatz <= 0) { aktPlatz += 4; }
+        aktPlatz = (n + 1) - (aktTisch * sitzeProTisch);
+        if (aktPlatz <= 0) { aktPlatz += parseInt(sitzeProTisch); }
         obj.innerText = 'Tisch Nr. ' + aktTisch + ', platz Nr. ' + aktPlatz + ': den Gast Nr. setzen:';
         obj.setAttribute('id', 'p' + n);
         const platzbtn = document.createElement('button');
@@ -338,29 +331,45 @@ function GaestePlatzZuordnen () {
         platzbtn.setAttribute('id', 'platzptn');
         platzbtn.addEventListener('click', function () {
           const val = document.getElementById('plgsinput' + n);
-          console.log('id  ' + 'p' + n + '     ' + val.value);
           plgastordnerlist[n] = val.value;
-          console.log(plgastordnerlist[n]);
           mylist.innerHTML = '';
-          PlatzeInputs(pageNr, pl, mylist, anzitemproSeite, plgastordnerlist, rTische, sitzeProTisch);
+          PlatzeInputs(pageNr, pl, mylist, anzitemproSeite, plgastordnerlist, rTische, sitzeProTisch, bestuhlung, gaestelist, veranstalungName);
         });
         obj.appendChild(objinput);
         obj.appendChild(platzbtn);
       }
 
-      // obj.appendChild(br);
-
       mylist.appendChild(obj);
       const saveBtn = document.createElement('button');
       saveBtn.setAttribute('id', 'SitzplaetzeZuordnungBTN');
-
-      /* saveBtn.addEventListener('click', function () {
-        console.log(plgastordnerlist);
-      });
-      main.innerHTML += '<br>';
-      mylist.appendChild(saveBtn); */
     }
+    const SaveZuordnungBTN = document.createElement('button');
+    SaveZuordnungBTN.innerText = 'Zuordnung Speichern';
+    SaveZuordnungBTN.setAttribute('id', 'platzptn');
+    SaveZuordnungBTN.addEventListener('click', function () {
+      fechtGastPlaetzeZuordnung(gaestelist, plgastordnerlist, rTische, sitzeProTisch, bestuhlung, veranstalungName);
+    });
+    mylist.appendChild(SaveZuordnungBTN);
   }
+}
+async function fechtGastPlaetzeZuordnung (gastelist, plaetzeZuordnung, reTische, platzproTisch, bestuhlung, veranstalungName) {
+  const tofetchlist = [];
+  for (let i = 0; i < plaetzeZuordnung.length; i++) {
+    tofetchlist[i] = gastelist[plaetzeZuordnung[i] - 1];
+  }
+  const sitzplan = { recheckigenTische: reTische, sitzeprotisch: platzproTisch, Bestuhlung: bestuhlung, gästezuordnung: tofetchlist };
+
+  await fetch('/gastplaetzezuordnunganliegen', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ veranvaeranstaltungsname: veranstalungName, Sitzplan: sitzplan })
+  }).then(response => {
+    if (response) { return response.json(); }
+  }).catch(error => {
+    console.log(error);
+  });
 }
 
 export default GaestePlatzZuordnen;
