@@ -15,17 +15,22 @@ function testfun () {
     main.innerHTML = '<a>window size changed </a><br>' + changes;
     prinlistOf50();
   });
+  // Diese Funktion prinlistOf50() dient dazu, eine Liste mit 50 Zahlen auf einer Webseite darzustellen. Hierfür werden mithilfe von JavaScript und DOM-Manipulation Elemente erzeugt und manipuliert.
 
+  // Zunächst wird eine Liste mit 50 Zahlen erzeugt:
   function prinlistOf50 () {
     const l = [50];
     for (let n = 1; n < 51; n++) {
       l[n - 1] = n;
     }
+    // Dann wird die Höhe des Browserfensters ermittelt und ein div-Element sowie eine ul-Liste erstellt:
     const wHeight = window.innerHeight - 200;
     main.innerHTML = '';
     const myDiv = document.createElement('div');
     const mylist = document.createElement('ul');
     myDiv.appendChild(mylist);
+
+    // Es werden Pfeil-Symbole (für den Vor- und Zurück-Button) erstellt:
 
     const larrow = document.createElement('span');
     larrow.innerText = '\u2190';
@@ -33,11 +38,14 @@ function testfun () {
     const rarrow = document.createElement('span');
     rarrow.setAttribute('id', 'paginationarrow');
     rarrow.innerText = '\u2192';
+    // Es wird berechnet, wie viele Elemente pro Seite dargestellt werden sollen und wie viele Seiten insgesamt erzeugt werden müssen:
     let pagesbuttunsAnz = 0;
     const anzitemproSeite = parseInt(wHeight / 19);
     let anzpages = 50 / anzitemproSeite;
     if (anzpages * wHeight / 19 < 50) { anzpages++; }
     const pagesbuttons = [anzpages];
+
+    // Es werden Buttons für jede Seite erstellt und hinzugefügt:
     if (aktuellSeite != null) { printl(aktuellSeite, l); }
     for (let x = 0; x < anzpages; x++) {
       if (x === 0) { myDiv.appendChild(larrow); }
@@ -55,6 +63,7 @@ function testfun () {
         aktuellSeite = x + 1;
         printl(x + 1, l);
       });
+
       myDiv.appendChild(pagesbuttons[pagesbuttunsAnz - 1]);
     }myDiv.appendChild(rarrow);
     rarrow.addEventListener('click', function () {

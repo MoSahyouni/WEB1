@@ -121,7 +121,7 @@ server.post('/gasterzeugen', async (req, res) => {
       if (err) throw err;
       const dbo = db.db('DatenBank');
       const Ver = { veranstaltung: req.body.veranvaeranstaltungsname };
-      const newvalues = { $set: { gaestelist: req.body.Gästelist } };
+      const newvalues = { gaestelist: req.body.Gästelist };
       dbo.collection('veranstaltungen').updateOne(Ver, newvalues, function (err, res) {
         if (err) throw err;
         console.log('veranstaltung updated');
@@ -143,7 +143,7 @@ server.post('/gastplaetzezuordnunganliegen', async (req, res) => {
     if (err) throw err;
     const dbo = db.db('DatenBank');
     const Ver = { verastaltungsname: req.body.veranvaeranstaltungsname };
-    const newvalues = { $set: { Sitzplan: req.body.Sitzplan } };
+    const newvalues = { Sitzplan: req.body.Sitzplan };
     dbo.collection('veranstaltungen').updateOne({ veranstaltung: req.body.veranvaeranstaltungsname }, newvalues, function (err, res) {
       if (err) throw err;
       console.log('veranstaltung updated');
@@ -155,7 +155,31 @@ server.post('/gastplaetzezuordnunganliegen', async (req, res) => {
       db.close();
     });
   });
+  /*
+  const client = new MongoClient('mongodb://localhost:27017');
+  let Collection;
 
+  async function connectToMongo () {
+    try {
+      await client.connect();
+      Collection = client.db('DatenBank').collection('veranstaltungen');
+    } catch (error) {
+      console.error('Error connecting', error);
+    }
+  }
+
+  connectToMongo();
+
+  server.get('/veranstaltungenAnzeigen', async (req, res) => {
+    try {
+      const veranstaltungen = await Collection.find({}).toArray();
+      res.json(veranstaltungen);
+    } catch (error) {
+      console.error('Error :', error);
+      res.sendStatus(500);
+    }
+  });
+*/
   /* const client = new MongoClient('mongodb://localhost:27017');
   try {
     await client.connect();

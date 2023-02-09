@@ -2,14 +2,16 @@ import fetch from 'node-fetch';
 function VerAnlegen () {
   document.getElementById('Main').innerHTML = `
   <ul id="list">
+  
+  
     <h2>Varanstaltung</h2>
     <li>name: <br><input id="vernname", type="text" ></li>
     <br>
     <li>Datum und Uhrzeit: <br><input type="datetime-local", name="meeting-time", id="verZeit">
     <br>
-    <ul><a>Sitzplan:</a>
+    <ul>
     <li>Anzahl der rechteckigen Tische: <input id="SitzplanTische", type="text" ></li>
-    <li>AAnzahl der Sitzplätze pro Tisch: <input id="plaetzeProTisch", type="text" ></li>
+    <li>Anzahl der Sitzplätze pro Tisch: <input id="plaetzeProTisch", type="text" ></li>
     <li>Bestuhlung aller Tische: <select name="neugasteinladung", id="bestuhlung", multiple>
                         <option>Einseitige</option>
                         <option>zweiseitige</option>
@@ -18,7 +20,8 @@ function VerAnlegen () {
     </ul>
     <input type="submit", id="btnJSON", value="Veranstaltung erstellen" >
   </ul>
-  <p id="userdata"></p>`;
+  <p id="userdata"></p>
+  `;
 
   const verNameInput = document.getElementById('vernname');
   const verTime = document.getElementById('verZeit');
@@ -34,7 +37,7 @@ function VerAnlegen () {
     if (tische.value === '') { requiredFields = false; }
     if (plaetzeproTisch.value === '') { requiredFields = false; }
     if (bestuhlung.value === '') { requiredFields = false; }
-    if (requiredFields === false) { window.alert('bitte alle Felder ausfühlen'); } else {
+    if (requiredFields === false) { window.alert('bitte alle Felder ausfüllen'); } else {
       let vers = [];
       let altename = false;
 

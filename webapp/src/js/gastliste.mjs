@@ -5,11 +5,11 @@ function gaestelistAnliegen () {
   Main.innerHTML = `
     <div id="listanzeiger1"></div>
     <div id="mainDiv">
-    <h3>Gästeliste: </h3>
-    <ul id="list2"><li>vaeranstaltungsname: <br><input id="vaeranstaltungsname", type="text" ><li/>
-    <li><h4>Gast: </h4></li>
-    <li>name: <br><input id="gastname", type="text"  ></li>
-    <li>Kind: <br><select name="gastkind" id="gastkind"  multiple>
+    <h3 id = "titel1">Gästeliste </h3>
+    <ul>
+    <li>vaeranstaltungsname: <br><input id="vaeranstaltungsname", type="text" ><li/>
+    <li>Name des Gasts: <br><input id="gastname", type="text"  ></li>
+    <li>Name des Kinds: <br><select name="gastkind" id="gastkind"  multiple>
                     <option>Ja</option>
                     <option>Nein</option>
                   </select>
@@ -21,7 +21,7 @@ function gaestelistAnliegen () {
                     <option>abgesagt</option>
                     </select>
     </li>
-    <button id="gastbtn" >Gast erstellen</button>
+    <button id="gastbtn" >Gast hinzufügen</button>
     <br> </ul></div>`;
   Main.setAttribute('align-items', 'inherit');
   const vaeranstaltungsname = document.getElementById('vaeranstaltungsname');
@@ -49,6 +49,7 @@ function gaestelistAnliegen () {
       // if (listanzeiger.children.length > 0) { removeListanzigerchildren(); }
       gaestelistPrint(GaesteList, listanzeiger1);
     }
+    // wenn gasteAnzahl === 0 && GaesteList.length !== 0, erstellt es einen Button 'gastlisbtn' mit dem Text "Gästelist erstellen"
     if (gasteAnzahl === 0 && GaesteList.length !== 0) {
       gasteAnzahl++;
       const gastlisbtn = document.createElement('button');
@@ -57,6 +58,7 @@ function gaestelistAnliegen () {
       gastlisbtn.addEventListener('click', function (event) {
         event.preventDefault();
         // Check if the event exists
+
         let erg = false;
         (async function () {
           const response = await
@@ -71,7 +73,7 @@ function gaestelistAnliegen () {
               veri = vers[i];
             }
           }
-          // Veranstaltung fetching to Server
+
           if (!erg) {
             window.alert('Es existiert keine Veranstaltung mit dem gegebenen Namen');
             console.log(vaeranstaltungsname.value);
@@ -175,54 +177,6 @@ function gaestelistAnliegen () {
       }
     });
   }
-  /* async function VerExis (name) {
-    let erg = false;
-
-    const response = await
-    fetch('/getveranstaltung');
-    const result = await response.json();
-    const vers = result;
-    for (let i = 0; i < vers.length; i++) {
-      if (name === vers[i].veranstaltung) {
-        console.log('------');
-        erg = true;
-      }
-    }
-    console.log(erg);
-    return erg;
-  } */
-  /* function gaestelistPrint (gl) {
-    for (let n = 0; n < gl.length; n++) {
-      // const listanzeigerChildren = listanzeiger.children.length;
-      const g = gl[n];
-      if (n >= 1 && g.name === gl[n - 1].name && g.kind === gl[n - 1].kind) {
-        gl.splice(n, 1); n--;
-      } else {
-        const obj = document.createElement('li');
-        const gname = g.name;
-        const gkind = g.kind;
-        const gstatus = g.status;
-        const objname = document.createElement('a');
-        objname.innerText = 'Gast Nr.' + (n + 1) + ': name: ' + gname + ', ';
-        const objkind = document.createElement('a');
-        objkind.innerText = 'kind: ' + gkind + ', ';
-        const objstatus = document.createElement('a');
-        objstatus.innerText = 'status: ' + gstatus;
-        obj.appendChild(objname);
-        // obj.appendChild(br);
-        obj.appendChild(objkind);
-        // obj.appendChild(br);
-        obj.appendChild(objstatus);
-        console.log(listanzeiger.children[n]);
-        listanzeiger.appendChild(obj);
-
-        // if (n >= listanzeigerChildren) { listanzeiger.appendChild(obj); }
-      }
-    }
-  }
-  function removeListanzigerchildren () {
-    listanzeiger.innerHTML = '';
-  } */
   let aktuellSeiteGL = 1;
   function gaestelistPrint (gl, myDiv) {
     // window.addEventListener('resize', function () { gaestelistPrint(gl, myDiv); });
