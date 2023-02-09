@@ -6,23 +6,7 @@ import testfun from './test.mjs';
 
 const verAn = VerAnlegen; // verAn verweist auf Funktion VerAnlagen
 const header = document.getElementById('bodyheader');
-header.innerHTML = `
-
-
-<div id="slide">
-<div class="slide active">
-  <img src="../background/image1.jpg" alt="Image 1">
-</div>
-<div class="slide">
-  <img src="../background/image2.png" alt="Image 2">
-</div>
-<div class="slide">
-  <img src="image3.jpg" alt="Image 3">
-</div>
-</div>
-
-
-`;
+header.innerHTML = '<h2>Veranstaltungsplanner</h2>';
 
 function ButtonBack () {
   const header = document.getElementById('bodyheader');
