@@ -29,12 +29,57 @@ function gaestelistAnliegen () {
   const gastkind = document.getElementById('gastkind');
   const gaststatus = document.getElementById('gasteinladung');
   const gastBtn = document.getElementById('gastbtn');
-  const gaestelistanzeiger = document.getElementById('gaestelistanzeiger');
+  // const gaestelistanzeiger = document.getElementById('gaestelistanzeiger');
 
   const listanzeiger1 = document.getElementById('listanzeiger1');
-  listanzeiger1.setAttribute('id', 'listanzeiger');
 
   const GaesteList = [];
+  function buttonundeventlistenerSpeicherBTN () {
+    const gastlisbtn = document.createElement('button');
+    gastlisbtn.innerText = 'Gästelist erstellen';
+    listanzeiger1.appendChild(gastlisbtn);
+    gastlisbtn.addEventListener('click', function (event) {
+      event.preventDefault();
+      // Check if the event exists
+
+      let erg = false;
+      (async function () {
+        const response = await
+        fetch('/getveranstaltung');
+        const result = await response.json();
+        const vers = result;
+        let veri = null;
+        for (let i = 0; i < vers.length; i++) {
+          if (vaeranstaltungsname.value === vers[i].veranstaltung) {
+            console.log('------');
+            erg = true;
+            veri = vers[i];
+          }
+        }
+
+        if (!erg) {
+          window.alert('Es existiert keine Veranstaltung mit dem gegebenen Namen');
+          console.log(vaeranstaltungsname.value);
+        } else {
+          if (veri.gaestelist != null) { window.alert('Es existiert eine Gästeliste für diese Veranstaltung'); } else {
+            (async function () {
+              await fetch('/gasterzeugen', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name: vaeranstaltungsname.value, Gästelist: GaesteList })
+              }).then(response => {
+                if (response) { return response.json(); }
+              }).catch(error => {
+                console.log(error);
+              });
+            })();
+          }
+        }
+      })();
+    });
+  }
   // const br = document.createElement('br');
   let gasteAnzahl = 0;
   gastBtn.addEventListener('click', function () {
@@ -52,50 +97,6 @@ function gaestelistAnliegen () {
     // wenn gasteAnzahl === 0 && GaesteList.length !== 0, erstellt es einen Button 'gastlisbtn' mit dem Text "Gästelist erstellen"
     if (gasteAnzahl === 0 && GaesteList.length !== 0) {
       gasteAnzahl++;
-      const gastlisbtn = document.createElement('button');
-      gastlisbtn.innerText = 'Gästelist erstellen';
-      gaestelistanzeiger.appendChild(gastlisbtn);
-      gastlisbtn.addEventListener('click', function (event) {
-        event.preventDefault();
-        // Check if the event exists
-
-        let erg = false;
-        (async function () {
-          const response = await
-          fetch('/getveranstaltung');
-          const result = await response.json();
-          const vers = result;
-          let veri = null;
-          for (let i = 0; i < vers.length; i++) {
-            if (vaeranstaltungsname.value === vers[i].veranstaltung) {
-              console.log('------');
-              erg = true;
-              veri = vers[i];
-            }
-          }
-
-          if (!erg) {
-            window.alert('Es existiert keine Veranstaltung mit dem gegebenen Namen');
-            console.log(vaeranstaltungsname.value);
-          } else {
-            if (veri.gaestelist != null) { window.alert('Es existiert eine Gästeliste für diese Veranstaltung'); } else {
-              (async function () {
-                await fetch('/gasterzeugen', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify({ veranvaeranstaltungsname: vaeranstaltungsname.value, Gästelist: GaesteList })
-                }).then(response => {
-                  if (response) { return response.json(); }
-                }).catch(error => {
-                  console.log(error);
-                });
-              })();
-            }
-          }
-        })();
-      });
     }
 
     if (gasteAnzahl === 1) { gastbearbeiten(); gasteAnzahl++; }
@@ -270,6 +271,7 @@ function gaestelistAnliegen () {
         }
       }
     }
+    buttonundeventlistenerSpeicherBTN();
   }
 }
 

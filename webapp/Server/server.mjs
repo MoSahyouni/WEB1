@@ -120,8 +120,8 @@ server.post('/gasterzeugen', async (req, res) => {
     MongoClient.connect('mongodb://localhost:27017', function (err, db) {
       if (err) throw err;
       const dbo = db.db('DatenBank');
-      const Ver = { veranstaltung: req.body.veranvaeranstaltungsname };
-      const newvalues = { gaestelist: req.body.Gästelist };
+      const Ver = { veranstaltung: req.body.name };
+      const newvalues = { $set: { gaestelist: req.body.Gästelist } };
       dbo.collection('veranstaltungen').updateOne(Ver, newvalues, function (err, res) {
         if (err) throw err;
         console.log('veranstaltung updated');
@@ -143,7 +143,7 @@ server.post('/gastplaetzezuordnunganliegen', async (req, res) => {
     if (err) throw err;
     const dbo = db.db('DatenBank');
     const Ver = { verastaltungsname: req.body.veranvaeranstaltungsname };
-    const newvalues = { Sitzplan: req.body.Sitzplan };
+    const newvalues = { $set: { Sitzplan: req.body.Sitzplan } };
     dbo.collection('veranstaltungen').updateOne({ veranstaltung: req.body.veranvaeranstaltungsname }, newvalues, function (err, res) {
       if (err) throw err;
       console.log('veranstaltung updated');
