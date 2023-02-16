@@ -177,13 +177,26 @@ cursor: pointer;
 */
 
 body {
-  background-color: hsl(288, 33%, 74%);
+  background-color: silver;
 }
-main{
+main {
   background-color: hsl(302, 27%, 45%);
   text-align: center;
   display: flex;
+  max-width:1000px;
+  margin: 4em auto;
+  padding: 2em;
+  background-color: white;
+  border-radius: 20px;
 }
+#Main {
+  font-family: Arial, sans-serif; 
+  font-size: 16px; 
+  text-align: center; 
+  background-color: #d3cece; 
+  padding: 20px; 
+  }
+  
 header {
   h2{
       align-self: center;
@@ -199,10 +212,10 @@ span {
 }
 
 ul {
-  color: rgb(85, 26, 1);
-  align-items: center;
-  text-align: center;
+  color: #551701;
+  text-align: left;
   list-style-position: inside;
+  padding: 0;
 }
 select {
   height: auto;
@@ -213,19 +226,17 @@ input[required] {
   border-color: red;
 
 }
-#mainSeiteDiv {
-  width: 33%;
-  margin: auto;
-  display: grid;
-}
-
-#mainSeiteDiv,button{
+#mainSeiteDiv,button {
   align-self: center;
-  width: 300px;
-  margin-top: 5px;
+  width: 100%;
+  height: 20em;  
+  margin: 2em auto;
+  display: flow-root;
   margin-bottom: 5px;
   color-scheme: dark;
-  border:0px;
+  align-items: center;
+  flex-direction: column;
+  
 }
 #gastloeschenbutton{
   width: 40%;
@@ -235,6 +246,7 @@ input[required] {
   width: 40%;
   margin: 5px
 }
+/*
 #paginationPage{
   margin: 5px;
   padding: 1px 6px;
@@ -244,17 +256,234 @@ input[required] {
 #paginationarrow{
   margin: 5px;
   color:rgb(31, 30, 30);
-}
+}*/
 #platzptn{
   width: 120px;
 }
 #plgsinput{
   width: 50px;
 }
+
+
+#back {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #fdbf39;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 5px;
+  cursor: pointer; 
+  
+  &:hover {
+    background-color: #b94c39;
+  }}
+
+  #mainSeiteDiv {
+    width: 80%;
+    margin: 6em auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+/*
+  #bodyheader{
+    display: flex;
+    flex-direction: column;
+    
+  }
+*/
+  header {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    border-radius: 20px;
+    bottom: 0;
+  }
+  footer {
+    background-color: #333;
+    color: white;
+    padding: 35px;
+    text-align: center;
+    border-radius: 20px; 
+   
+  }
+    
+  @media (max-width: 777px) {
+  
+  }
+  #verZeit{
+    width: 785px;
+    height: 30px;
+    padding: 5px;
+    font-size: 16px;
+    margin: 5px 0;
+    border-radius:10px;
+    }
+
+/*
+  #verZeit {
+    width: 91%;
+    height: 30px;
+    padding: 5px;
+    font-size: 20px;
+    margin: 5px 0;
+    float: right;
+  }
+  #vernname{
+    width: 93%;
+  padding: 5px;
+  font-size: 20px;
+  margin: 5px 0;
+  float: right;
+}*/
+
+#btnJSON{
+  float: right;
+  width: 100%;
+}
+/*
+#VerAnlegentexte{
+  text-align: left;
+  
+}*/
+input[type="submit"] {
+  background-color: #4CAF50; 
+  color: white; 
+  padding: 10px 20px; 
+  border-radius: 5px; 
+  border: none; 
+  cursor: pointer;
+&:hover {
+  background-color: #77d186;
+
+}
+}
+    
+input[type="text"],
+select {
+  width: 100%;
+  height: 40px;
+  padding: 10px;
+  font-size: 16px;
+  box-sizing: border-box;
+  border: 1px solid #551701;
+  border-radius: 10px;
+}
+
+    
+li { 
+  margin-bottom: 10px; 
+}
+#bestuhlung{
+  height: 4em;
+  border-block: 3em;
+  padding: 5px;
+  margin-bottom: 10px;
+  font-size: 18px;
+  width: 100%;
+}
+
+
+///// AnzeigeSite//
+
+#Text1{
+  text-align: center;
+  width: 170%;
+  
+}
+#paginationarrow{
+  background-color: silver;
+  display: block;
+  width: 50%;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-left: 25%;
+}
+ 
+#paginationPage{
+  display: contents;
+}
 #listanzeiger{
   text-align: left;
+  font-size: 15px;
+  padding-right: 40px;
 }
 
 
 
+//////Gisteliste///
+
+button,input,#gastbearbeitenbutton,#gastloeschenbutton {
+  width: 100%;
+  height: 40px;
+  margin-top: 10px;
+  font-size: 18px;
+  &:hover {
+    background-color: rgb(124, 119, 119);
+    }
+  }
+
+
+#inputbearbeitundloeschen{
+    border-radius: 10px;
+    height: 2em;
+    margin-top: 24px;
+    margin-left: 1px;    
+}
+
+#gastkind {
+  height: 4em;
+  padding: 5px;
+  width: 100%;
+  margin-top: 1.4em;
+}
+#gasteinladung {
+  height: 7em;
+  padding: 5px;
+  width: 100%;
+}
+
+
+#gaesterstellen{
+  width: 80%;
+  
+}
+
+#neugastkind {
+  height: 4em;
+  padding: 5px;
+  width: 100%;
+  margin-left: 5px;
+}
+#neugasteinladung {
+  height: 7em;
+  padding: 5px;
+  width: 100%;
+  margin-left: 5px;
+}
+#neugastname{
+  margin-top: 14px;
+  margin-left: 5px;
+}
+
+#gastname{
+  margin-top:1px;
+}
+/*
+#gbearbeitendiv{
+  margin-top: 5.8em;
+}*/
+
+
+  /*
+  button,input{
+    width: 100%;
+    height: 40px;
+    margin-top: 10px;
+    font-size: 18px;
+  }
+  button:hover,
+  input:hover {
+    background-color: #b85151;
+  }*/
 

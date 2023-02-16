@@ -4,7 +4,7 @@ import fetch from 'node-fetch';
 function veranstaltungenAnzeigen () {
   const veranstaltungenContainer = document.createElement('div');
   const main = document.getElementById('Main');
-  main.innerHTML = '';
+  main.innerHTML = ' ';
   if (!veranstaltungenContainer) {
     console.error('nicht gefunden');
   }
@@ -44,7 +44,7 @@ function veranstaltungenPrint (veranstaltungen, myDiv) {
   const mylist = document.createElement('ul');
   mylist.setAttribute('id', 'listanzeiger');
   const lMsg = document.createElement('a');
-  lMsg.innerText = 'alle Veranstaltungen';
+  lMsg.innerHTML = '<h2 id = "Text1"> Alle Veranstaltungen:<h2> ';
   mylist.appendChild(lMsg);
   myDiv.appendChild(mylist);
   // creating pagination arrows

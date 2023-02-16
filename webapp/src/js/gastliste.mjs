@@ -7,7 +7,7 @@ function gaestelistAnliegen () {
     <div id="mainDiv">
     <h3 id = "titel1">Gästeliste </h3>
     <ul>
-    <li>vaeranstaltungsname: <br><input id="vaeranstaltungsname", type="text" ><li/>
+    <li>vaeranstaltungsname: <br><input id="vaeranstaltungsname", type="text" ></li>
     <li>Name des Gasts: <br><input id="gastname", type="text"  ></li>
     <li>Name des Kinds: <br><select name="gastkind" id="gastkind"  multiple>
                     <option>Ja</option>
@@ -36,6 +36,7 @@ function gaestelistAnliegen () {
   const GaesteList = [];
   function buttonundeventlistenerSpeicherBTN () {
     const gastlisbtn = document.createElement('button');
+    gastlisbtn.setAttribute('id', 'gaesterstellen');
     gastlisbtn.innerText = 'Gästelist erstellen';
     listanzeiger1.appendChild(gastlisbtn);
     gastlisbtn.addEventListener('click', function (event) {
@@ -105,8 +106,9 @@ function gaestelistAnliegen () {
     const gbearbeitendiv = document.createElement('div');
     gbearbeitendiv.setAttribute('id', 'gbearbeitendiv');
     const gbearbeitenMsg = document.createElement('h4');
-    gbearbeitenMsg.innerText = 'Gast NR.';
+    gbearbeitenMsg.innerText = 'Gast NR:';
     const gastNrinput = document.createElement('input');
+    gastNrinput.setAttribute('id', 'inputbearbeitundloeschen');
     const gastbearbeitenbutton = document.createElement('button');
     gastbearbeitenbutton.innerText = 'bearbeiten';
     gastbearbeitenbutton.setAttribute('id', 'gastbearbeitenbutton');
