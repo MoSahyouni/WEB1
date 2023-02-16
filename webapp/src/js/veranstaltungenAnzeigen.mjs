@@ -62,6 +62,7 @@ function veranstaltungenPrint (veranstaltungen, myDiv) {
   if (anzpages <= 0) { anzpages = veranstaltungen.length; }
   if (isNaN(anzpages)) { anzpages = veranstaltungen.length; }
   if (anzpages * wHeight / 19 < veranstaltungen.length) { anzpages++; }
+  if (anzpages > veranstaltungen.length) { anzpages = veranstaltungen.length; }
   if (aktuellSeiteGL > anzpages) { aktuellSeiteGL = anzpages; }
   console.log(anzitemproSeite);
   if (aktuellSeiteGL !== 1) { printgl(aktuellSeiteGL, veranstaltungen, mylist, anzitemproSeite); } else {
@@ -93,9 +94,12 @@ function veranstaltungenPrint (veranstaltungen, myDiv) {
   const paginationPage = document.createElement('a');
   paginationPage.innerText = aktuellSeiteGL + '/ ' + anzpages;
   paginationPage.setAttribute('id', 'paginationPage');
-  myDiv.appendChild(larrow);
-  myDiv.appendChild(paginationPage);
-  myDiv.appendChild(rarrow);
+  const paginationInfoDiv = document.createElement('div');
+  paginationInfoDiv.setAttribute('id', 'paginationDiv');
+  paginationInfoDiv.appendChild(larrow);
+  paginationInfoDiv.appendChild(paginationPage);
+  paginationInfoDiv.appendChild(rarrow);
+  myDiv.appendChild(paginationInfoDiv);
 }
 
 function printgl (pageNr, gl, mylist, anzitemproSeite) {

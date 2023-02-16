@@ -2,6 +2,7 @@ import fetch from 'node-fetch';
 function GaestePlatzZuordnen () {
   const main = document.getElementById('Main');
   main.innerHTML = `
+  <div id="mainInZuordnen">
   <ul id="list">
     <h2>Geben Sie den Namen der zu verarbeitenden Veranstaltung ein:</h2>
     <li>name: <br><input id="vername", type="text" >
@@ -9,7 +10,8 @@ function GaestePlatzZuordnen () {
     </ul>
     <input type="submit", id="btnJSON", value="Veranstaltung bearbeiten" >
   </ul>
-  <p id="userdata"></p>`;
+  <p id="userdata"></p>
+  </div>`;
   const verName = document.getElementById('vername');
   const jsonButton = document.getElementById('btnJSON');
 
@@ -33,7 +35,7 @@ function GaestePlatzZuordnen () {
           let ver = null;
           let platzlist = null;
           for (let i = 0; i < vers.length; i++) {
-            if (verName.value === vers[i].veranstaltung) {
+            if (verName.value === vers[i].name) {
               VerExistieret = true;
               ver = vers[i];
               break;
@@ -44,18 +46,12 @@ function GaestePlatzZuordnen () {
           } else {
             const gl = ver.gaestelist;
             // veranstaltung = Name in Database
-            const veranstalungName = ver.veranstaltung;
+            const veranstalungName = ver.name;
             rTische = ver.Sitzplan.recheckigenTische;
             sitzeProTisch = ver.Sitzplan.sitzeprotisch;
             bestuhlung = ver.Sitzplan.Bestuhlung;
             platzlist = new Array(rTische * sitzeProTisch);
             plgastordnerlist = new Array(rTische * sitzeProTisch);
-            /* for (let i = 0; i < rTische * sitzeProTisch; i++) {
-              platzlist.push(null);
-              plgastordnerlist.push(null);
-            } */
-
-            // const sp = ver.Sitzplan;
             main.innerHTML = `<div id="gaestelistanzeiger"></div>
               <div id="sitzplananzeiger"></div>
               <div id="zuordnendiv"></div>`;
@@ -82,11 +78,8 @@ function GaestePlatzZuordnen () {
   function gaestelistPrint (gl, myDiv) {
     const block = document.createElement('li');
     block.innerHTML = '<li><a>Gast Nr.8: name: 8, </a><a>kind: Ja, </a><a>status: unbekannt</a></li>';
-
-    myDiv.appendChild(block); const blockHeight = block.clientHeight;
+    myDiv.appendChild(block); const blockHeight = block.clientHeight + 12;
     block.remove();
-    // pagination aktuelle Seite
-    // let aktuellSeite = 1;
     myDiv.innerHTML = '';
     const wHeight = window.innerHeight - 230;
     const mylist = document.createElement('ul');
@@ -109,7 +102,8 @@ function GaestePlatzZuordnen () {
     if (parseInt(gl.length / anzitemproSeite) <= 0) { anzpages = 1; } else { anzpages = parseInt(gl.length / anzitemproSeite); }
     if (anzpages <= 0) { anzpages = gl.length; }
     if (isNaN(anzpages)) { anzpages = gl.length; }
-    if (anzpages * wHeight / 19 < gl.length) { anzpages++; }
+    if (anzpages * anzitemproSeite < gl.length) { anzpages++; }
+    if (anzpages > gl.length) { anzpages = gl.length; }
     if (aktuellSeiteGL > anzpages) { aktuellSeiteGL = anzpages; }
     if (aktuellSeiteGL !== 1) { printgl(aktuellSeiteGL, gl, mylist, anzitemproSeite); } else {
       aktuellSeiteGL = 1;
@@ -140,9 +134,12 @@ function GaestePlatzZuordnen () {
     const paginationPage = document.createElement('a');
     paginationPage.innerText = aktuellSeiteGL + '/ ' + anzpages;
     paginationPage.setAttribute('id', 'paginationPage');
-    myDiv.appendChild(larrow);
-    myDiv.appendChild(paginationPage);
-    myDiv.appendChild(rarrow);
+    const paginationInfoDiv = document.createElement('div');
+    paginationInfoDiv.setAttribute('id', 'paginationDiv');
+    paginationInfoDiv.appendChild(larrow);
+    paginationInfoDiv.appendChild(paginationPage);
+    paginationInfoDiv.appendChild(rarrow);
+    myDiv.appendChild(paginationInfoDiv);
   }
 
   function printgl (pageNr, gl, mylist, anzitemproSeite) {
@@ -293,9 +290,12 @@ function GaestePlatzZuordnen () {
     const paginationPage = document.createElement('a');
     paginationPage.innerText = aktuellSeitePL + '/ ' + anzpages;
     paginationPage.setAttribute('id', 'paginationPage');
-    myDiv.appendChild(larrow);
-    myDiv.appendChild(paginationPage);
-    myDiv.appendChild(rarrow);
+    const paginationInfoDiv = document.createElement('div');
+    paginationInfoDiv.setAttribute('id', 'paginationDiv');
+    paginationInfoDiv.appendChild(larrow);
+    paginationInfoDiv.appendChild(paginationPage);
+    paginationInfoDiv.appendChild(rarrow);
+    myDiv.appendChild(paginationInfoDiv);
   }
   function PlatzeInputs (pageNr, pl, mylist, anzitemproSeite, plgastordnerlist, rTische, sitzeProTisch, bestuhlung, gaestelist, veranstalungName) {
     // const aktSitzPlatz = 1;
@@ -345,8 +345,9 @@ function GaestePlatzZuordnen () {
     }
     const SaveZuordnungBTN = document.createElement('button');
     SaveZuordnungBTN.innerText = 'Zuordnung Speichern';
-    SaveZuordnungBTN.setAttribute('id', 'platzptn');
+    SaveZuordnungBTN.setAttribute('id', 'zuordSpeichern');
     SaveZuordnungBTN.addEventListener('click', function () {
+      console.log('fetching......' + veranstalungName);
       fechtGastPlaetzeZuordnung(gaestelist, plgastordnerlist, rTische, sitzeProTisch, bestuhlung, veranstalungName);
     });
     mylist.appendChild(SaveZuordnungBTN);
@@ -364,7 +365,7 @@ async function fechtGastPlaetzeZuordnung (gastelist, plaetzeZuordnung, reTische,
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ veranvaeranstaltungsname: veranstalungName, Sitzplan: sitzplan })
+    body: JSON.stringify({ veranstaltungsname: veranstalungName, Sitzplan: sitzplan })
   }).then(response => {
     if (response) { return response.json(); }
   }).catch(error => {

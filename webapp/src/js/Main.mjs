@@ -2,7 +2,6 @@ import VerAnlegen from './VerAnlegen.mjs';
 import gaestelistAnliegen from './gastliste.mjs';
 import GaestePlatzZuordnen from './SitzplanZuordnungAnliegen.mjs';
 import veranstaltungenAnzeigen from './veranstaltungenAnzeigen.mjs';
-import testfun from './test.mjs';
 
 const verAn = VerAnlegen; // verAn verweist auf Funktion VerAnlagen
 const header = document.getElementById('bodyheader');
@@ -49,20 +48,12 @@ gaesteplaetzeZuordnen.addEventListener('click', () => {
   GaestePlatzZuordnen();
 });
 
-const testb = document.createElement('button');
-testb.textContent = 'window size Monitor';
-testb.addEventListener('click', () => {
-  ButtonBack();
-  testfun();
-});
-
 main.appendChild(mainDiv);
 mainDiv.appendChild(btn2);
 mainDiv.appendChild(btn);
 
 mainDiv.appendChild(gastlistErstellen);
 mainDiv.appendChild(gaesteplaetzeZuordnen);
-mainDiv.appendChild(testb);
 /*
 const slides = document.querySelectorAll('.slide');
 

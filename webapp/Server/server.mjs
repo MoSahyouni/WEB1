@@ -47,11 +47,11 @@ server.post('/veranstaltungerzeugen', async (req, res) => {
     const veranstaltungen = db.collection('veranstaltungen');
     const Splan = db.collection('Sitzpläne');
     await Splan.insertOne({
-      verastaltungsname: req.body.name,
+      veranstaltungsname: req.body.name,
       Sitzplan: req.body.sitzplan
     });
     const result = await veranstaltungen.insertOne({
-      veranstaltung: req.body.name,
+      name: req.body.name,
       datum: req.body.datum,
       Sitzplan: req.body.sitzplan
     });
@@ -112,21 +112,17 @@ server.post('/gasterzeugen', async (req, res) => {
     await client.connect();
     const db = client.db('DatenBank');
     const gäste = db.collection('GästeListen');
-    const result = await gäste.insertOne({
-      veranvaeranstaltungsname: req.body.veranvaeranstaltungsname,
-      gästeliste: req.body.Gästelist
-    });
 
-    MongoClient.connect('mongodb://localhost:27017', function (err, db) {
+    const Ver = { name: req.body.vname };
+    const newvalues = { $set: { gaestelist: req.body.Gästelist } };
+    db.collection('veranstaltungen').updateOne(Ver, newvalues, function (err, res) {
       if (err) throw err;
-      const dbo = db.db('DatenBank');
-      const Ver = { veranstaltung: req.body.name };
-      const newvalues = { $set: { gaestelist: req.body.Gästelist } };
-      dbo.collection('veranstaltungen').updateOne(Ver, newvalues, function (err, res) {
-        if (err) throw err;
-        console.log('veranstaltung updated');
-        db.close();
-      });
+      console.log('veranstaltung updated');
+    });
+    const result = await gäste.insertOne({
+      veranvaeranstaltungsname: req.body.vname,
+      gästeliste: req.body.Gästelist
+
     });
 
     res.json(result);
@@ -139,12 +135,13 @@ server.post('/gasterzeugen', async (req, res) => {
 });
 
 server.post('/gastplaetzezuordnunganliegen', async (req, res) => {
-  MongoClient.connect('mongodb://localhost:27017', function (err, db) {
+  console.log(req.body.veranstaltungsname);
+  /* MongoClient.connect('mongodb://localhost:27017', function (err, db) {
     if (err) throw err;
     const dbo = db.db('DatenBank');
-    const Ver = { verastaltungsname: req.body.veranvaeranstaltungsname };
+    const Ver = { veranstaltungsname: req.body.veranstaltungsname };
     const newvalues = { $set: { Sitzplan: req.body.Sitzplan } };
-    dbo.collection('veranstaltungen').updateOne({ veranstaltung: req.body.veranvaeranstaltungsname }, newvalues, function (err, res) {
+    dbo.collection('veranstaltungen').updateOne({ name: req.body.veranstaltungsname }, newvalues, function (err, res) {
       if (err) throw err;
       console.log('veranstaltung updated');
       db.close();
@@ -153,9 +150,33 @@ server.post('/gastplaetzezuordnunganliegen', async (req, res) => {
       if (err) throw err;
       console.log('veranstaltung updated');
       db.close();
+    }); */
+  const client3 = new MongoClient('mongodb://localhost:27017');
+  try {
+    await client3.connect();
+    const db = client3.db('DatenBank');
+    const spl = db.collection('Sitzpläne');
+
+    const Ver = { name: req.body.veranstaltungsname };
+    const newvalues = { $set: { Sitzplan: req.body.Sitzplan } };
+    db.collection('veranstaltungen').updateOne(Ver, newvalues, function (err, res) {
+      if (err) throw err;
     });
-  });
-  /*
+    const ver2 = { veranstaltungsname: req.body.veranstaltungsname };
+    const newvalues2 = { $set: { Sitzplan: req.body.Sitzplan } };
+    const result = await spl.updateOne(ver2, newvalues2, function (err, res) {
+      if (err) throw err;
+    });
+
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occured while creating the event' });
+  } finally {
+    client3.close();
+  }
+});
+/*
   const client = new MongoClient('mongodb://localhost:27017');
   let Collection;
 
@@ -180,7 +201,7 @@ server.post('/gastplaetzezuordnunganliegen', async (req, res) => {
     }
   });
 */
-  /* const client = new MongoClient('mongodb://localhost:27017');
+/* const client = new MongoClient('mongodb://localhost:27017');
   try {
     await client.connect();
     const db = client.db('DatenBank');
@@ -210,6 +231,5 @@ server.post('/gastplaetzezuordnunganliegen', async (req, res) => {
   } finally {
     client.close();
   } */
-});
 
 server.listen(port, console.log('server listening on port ' + port));

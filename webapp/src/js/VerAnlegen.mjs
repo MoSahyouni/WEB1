@@ -50,7 +50,7 @@ function VerAnlegen () {
           const result = await response.json();
           vers = result;
           for (let i = 0; i < vers.length; i++) {
-            if (verNameInput.value === vers[i].veranstaltung) {
+            if (verNameInput.value === vers[i].name) {
               altename = true;
               window.alert('Veranstaltungsname existiert schon, bitte name ändern.');
 

@@ -51,8 +51,7 @@ function gaestelistAnliegen () {
         const vers = result;
         let veri = null;
         for (let i = 0; i < vers.length; i++) {
-          if (vaeranstaltungsname.value === vers[i].veranstaltung) {
-            console.log('------');
+          if (vaeranstaltungsname.value === vers[i].name) {
             erg = true;
             veri = vers[i];
           }
@@ -69,7 +68,7 @@ function gaestelistAnliegen () {
                 headers: {
                   'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ name: vaeranstaltungsname.value, Gästelist: GaesteList })
+                body: JSON.stringify({ vname: vaeranstaltungsname.value, Gästelist: GaesteList })
               }).then(response => {
                 if (response) { return response.json(); }
               }).catch(error => {
@@ -186,7 +185,8 @@ function gaestelistAnliegen () {
     const block = document.createElement('li');
     block.innerHTML = '<li><a>Gast Nr.8: name: 8, </a><a>kind: Ja, </a><a>status: unbekannt</a></li>';
 
-    myDiv.appendChild(block); const blockHeight = block.clientHeight;
+    myDiv.appendChild(block);
+    const blockHeight = block.clientHeight + 8;
     block.remove();
     // pagination aktuelle Seite
     // let aktuellSeite = 1;
@@ -208,11 +208,13 @@ function gaestelistAnliegen () {
     // finding the number of pagenation pages
     let anzitemproSeite = parseInt(wHeight / parseInt(blockHeight));
     if (anzitemproSeite <= 0) { anzitemproSeite = 1; }
+    if (anzitemproSeite >= 16) { anzitemproSeite = 15; }
     let anzpages = 0;
     if (parseInt(gl.length / anzitemproSeite) <= 0) { anzpages = 1; } else { anzpages = parseInt(gl.length / anzitemproSeite); }
     if (anzpages <= 0) { anzpages = gl.length; }
     if (isNaN(anzpages)) { anzpages = gl.length; }
-    if (anzpages * wHeight / 19 < gl.length) { anzpages++; }
+    if (anzpages * anzitemproSeite < gl.length) { anzpages++; }
+    if (anzpages > gl.length) { anzpages = gl.length; }
     if (aktuellSeiteGL > anzpages) { aktuellSeiteGL = anzpages; }
     if (aktuellSeiteGL !== 1) { printgl(aktuellSeiteGL, gl, mylist, anzitemproSeite); } else {
       aktuellSeiteGL = 1;
@@ -222,10 +224,7 @@ function gaestelistAnliegen () {
       if (!(aktuellSeiteGL === anzpages)) {
         aktuellSeiteGL++;
         mylist.innerHTML = '';
-        const glMsg = document.createElement('a');
-        glMsg.innerText = 'GästeList';
         paginationPage.innerText = aktuellSeiteGL + '/ ' + anzpages;
-        mylist.appendChild(glMsg);
         printgl(aktuellSeiteGL, gl, mylist, anzitemproSeite);
       }
     });
@@ -233,19 +232,19 @@ function gaestelistAnliegen () {
       if (aktuellSeiteGL !== 1) {
         aktuellSeiteGL--;
         mylist.innerHTML = '';
-        const glMsg = document.createElement('a');
-        glMsg.innerText = 'GästeList';
         paginationPage.innerText = aktuellSeiteGL + '/ ' + anzpages;
-        mylist.appendChild(glMsg);
         printgl(aktuellSeiteGL, gl, mylist, anzitemproSeite);
       }
     });
     const paginationPage = document.createElement('a');
     paginationPage.innerText = aktuellSeiteGL + '/ ' + anzpages;
     paginationPage.setAttribute('id', 'paginationPage');
-    myDiv.appendChild(larrow);
-    myDiv.appendChild(paginationPage);
-    myDiv.appendChild(rarrow);
+    const paginationInfoDiv = document.createElement('div');
+    paginationInfoDiv.setAttribute('id', 'paginationDiv');
+    paginationInfoDiv.appendChild(larrow);
+    paginationInfoDiv.appendChild(paginationPage);
+    paginationInfoDiv.appendChild(rarrow);
+    myDiv.appendChild(paginationInfoDiv);
     function printgl (pageNr, gl, mylist, anzitemproSeite) {
       for (let n = (pageNr - 1) * anzitemproSeite; n < gl.length && n < pageNr * anzitemproSeite; n++) {
         // const listanzeigerChildren = listanzeiger.children.length;
@@ -275,6 +274,9 @@ function gaestelistAnliegen () {
     }
     buttonundeventlistenerSpeicherBTN();
   }
+  window.addEventListener('resize', function () {
+    gaestelistPrint(GaesteList, listanzeiger1);
+  });
 }
 
 export default gaestelistAnliegen;

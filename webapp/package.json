@@ -32,6 +32,7 @@
     "less-plugin-clean-css": "^1.5.1",
     "lesshint": "^4.6.5",
     "lesshint-reporter-stylish": "^3.0.0",
+    "mongodb": "^5.0.1",
     "semistandard": "^16.0.1",
     "snazzy": "^9.0.0",
     "terser": "^5.15.1"
@@ -39,7 +40,6 @@
   "type": "module",
   "dependencies": {
     "http": "^0.0.1-security",
-    "mongodb": "^4.13.0",
     "node-fetch": "2.0"
   }
 }
