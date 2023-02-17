@@ -89,7 +89,7 @@ function EinladungStatusBearbeiten () {
 
   function gastbearbeiten () {
     const gbearbeitendiv = document.createElement('div');
-    gbearbeitendiv.setAttribute('id', 'gbearbeitendiv');
+    gbearbeitendiv.setAttribute('id', 'gbearbeitendiv2');
     const gbearbeitenMsg = document.createElement('h4');
     gbearbeitenMsg.innerText = 'Gast NR:';
     const gastNrinput = document.createElement('input');
@@ -111,9 +111,9 @@ function EinladungStatusBearbeiten () {
         const gastinfo = GaesteList[gastnr - 1];
         const neuegastinputs = document.createElement('ul');
         neuegastinputs.innerHTML = `
-        <li>name: <br><a id="gastname" >` + GaesteList[gastNrinput.value - 1].name + `</li>
-        <li>Kind: <br><a name="neugastkind" id="gastkind" >` + GaesteList[gastNrinput.value - 1].kind + `</li> 
-        <li>Alte Einladungsstatus: <br><a id="gaststatus" >` + GaesteList[gastNrinput.value - 1].status + `</li>              
+        <li>name: <a id="gastname" >` + GaesteList[gastNrinput.value - 1].name + `</li>
+        <li>Kind: <a name="neugastkind" id="gastkind" >` + GaesteList[gastNrinput.value - 1].kind + `</li> 
+        <li>Alte Einladungsstatus: <a id="gaststatus" >` + GaesteList[gastNrinput.value - 1].status + `</li>              
         <li>Neue Einladungsstatus: <br><select name="neugasteinladung", id="neugasteinladung", multiple>
                         <option>unbekannt</option>
                         <option>eingeladen</option>

@@ -121,7 +121,9 @@ function printgl (pageNr, vl, mylist, anzitemproSeite) {
 
 function veranstaltunglöschenUndLoschenBtn (verlist, htmlspace) {
   htmlspace.innerHTML = '';
-  const msg = document.createElement('h4');
+  htmlspace.setAttribute('id', 'divVL');
+  const msg = document.createElement('a');
+  msg.setAttribute('id', 'loschenvMsgVL');
   msg.innerText = 'Die Veranstaltung ';
   const verName = document.createElement('input');
   verName.setAttribute('id', 'loschenInputVA');

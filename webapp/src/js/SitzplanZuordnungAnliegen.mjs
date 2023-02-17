@@ -167,7 +167,7 @@ function GaestePlatzZuordnen () {
 
   function plgastordnerlistPrint (rTische, sitzeProTisch, bestuhlung, plgastordnerlist, vername) {
     const header = document.getElementById('bodyheader');
-    header.innerHTML = '<h5 id="back">zurück zur Hauptseite</h5><h2></h2>' + '<h5>  für die Veranstaltung ' + vername + ' gibt es ' + rTische +
+    header.innerHTML = '<h5 id="back">zurück zur Hauptseite</h5><h2></h2>' + '<h4 id="infoMsgheader">  für die Veranstaltung ' + vername + ' gibt es ' + rTische +
     ' Tische und ' + sitzeProTisch + ' Sitzplatz pro Tisch. Tische haben ' + bestuhlung + ' bestuhlung.';
     const btnBack = document.getElementById('back');
     btnBack.addEventListener('click', () => {
@@ -258,7 +258,8 @@ function GaestePlatzZuordnen () {
         obj.setAttribute('id', 'p' + n);
         const gastloschen = document.createElement('button');
         gastloschen.innerText = 'Gast löschen';
-        gastloschen.setAttribute('id', 'platzptn');
+        gastloschen.setAttribute('id', 'platzptnloschen');
+        obj.appendChild(document.createElement('br'));
         obj.appendChild(gastloschen);
         gastloschen.addEventListener('click', function () {
           plgastordnerlist[n] = null;
