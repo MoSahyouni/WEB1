@@ -1,5 +1,4 @@
 
-import fetch from 'node-fetch';
 function EinladungStatusBearbeiten () {
   const Main = document.getElementById('Main');
   Main.innerHTML = `
@@ -23,7 +22,7 @@ function EinladungStatusBearbeiten () {
   checkBtn.addEventListener('click', function () {
     (async function () {
       const response = await
-      fetch('/getveranstaltung');
+      window.fetch('/getveranstaltung');
       const result = await response.json();
       const vers = result;
       let veri = null;
@@ -70,7 +69,7 @@ function EinladungStatusBearbeiten () {
       // Check if the event exists
 
       (async function () {
-        await fetch('/gastelisteAktualisieren', {
+        window.fetch('/gastelisteAktualisieren', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

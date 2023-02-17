@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 function GaestePlatzZuordnen () {
   const main = document.getElementById('Main');
   main.innerHTML = `
@@ -30,8 +29,7 @@ function GaestePlatzZuordnen () {
 
       (async function () {
         try {
-          const response = await
-          fetch('/getveranstaltung');
+          const response = await window.fetch('/getveranstaltung');
           const result = await response.json();
           vers = result;
           let ver = null;
@@ -307,7 +305,7 @@ async function fechtGastPlaetzeZuordnung (gastelist, plaetzeZuordnung, reTische,
   }
   const sitzplan = { recheckigenTische: reTische, sitzeprotisch: platzproTisch, Bestuhlung: bestuhlung, gästezuordnung: tofetchlist };
 
-  await fetch('/gastplaetzezuordnunganliegen', {
+  await window.fetch('/gastplaetzezuordnunganliegen', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

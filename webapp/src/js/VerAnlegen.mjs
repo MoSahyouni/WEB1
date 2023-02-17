@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 function VerAnlegen () {
   document.getElementById('Main').innerHTML = `
   <ul id="list">
@@ -45,8 +44,7 @@ function VerAnlegen () {
 
       (async function () {
         try {
-          const response = await
-          fetch('/getveranstaltung');
+          const response = await window.fetch('/getveranstaltung');
           const result = await response.json();
           vers = result;
           for (let i = 0; i < vers.length; i++) {
@@ -59,7 +57,7 @@ function VerAnlegen () {
           }
           if (!altename) {
             (async function () {
-              await fetch('/veranstaltungerzeugen', {
+              await window.fetch('/veranstaltungerzeugen', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'

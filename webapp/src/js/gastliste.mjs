@@ -1,5 +1,3 @@
-
-import fetch from 'node-fetch';
 function gaestelistAnliegen () {
   const Main = document.getElementById('Main');
   Main.innerHTML = `
@@ -45,8 +43,7 @@ function gaestelistAnliegen () {
 
       let erg = false;
       (async function () {
-        const response = await
-        fetch('/getveranstaltung');
+        const response = await window.fetch('/getveranstaltung');
         const result = await response.json();
         const vers = result;
         let veri = null;
@@ -63,7 +60,7 @@ function gaestelistAnliegen () {
         } else {
           if (veri.gaestelist != null) { window.alert('Es existiert eine Gästeliste für diese Veranstaltung'); } else {
             (async function () {
-              await fetch('/gasterzeugen', {
+              window.fetch('/gasterzeugen', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'
