@@ -70,6 +70,28 @@ server.get('/getveranstaltung', (req, res) => {
   })();
 });
 
+server.post('/veranstaltungloschen', (req, res) => {
+  (async function () {
+    const client5 = new MongoClient('mongodb://localhost:27017');
+    try {
+      await client5.connect();
+      const dbo = client5.db('DatenBank');
+      const collection = dbo.collection('veranstaltungen');
+      await collection.deleteOne({ name: req.body.name });
+      const sp = dbo.collection('Sitzpläne');
+      const gl = dbo.collection('GästeListen');
+      await sp.deleteOne({ veranstaltungsname: req.body.name });
+      await gl.deleteOne({ veranstaltungsname: req.body.name });
+      // dbo.collection('Sitzpläne').deleteOne({ veranstaltungsname: req.body.name });
+      // dbo.collection('GästeListen').deleteOne({ veranstaltungsname: req.body.name });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      client5.close();
+    }
+  })();
+});
+
 server.post('/gasterzeugen', async (req, res) => {
   const client = new MongoClient('mongodb://localhost:27017');
   try {

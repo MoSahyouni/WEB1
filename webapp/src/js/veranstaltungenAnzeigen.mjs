@@ -1,6 +1,3 @@
-
-import fetch from 'node-fetch';
-
 function veranstaltungenAnzeigen () {
   const veranstaltungenContainer = document.createElement('div');
   const main = document.getElementById('Main');
@@ -11,9 +8,10 @@ function veranstaltungenAnzeigen () {
   (async function () {
     let vers = null;
     const listanzeigerDiv = document.createElement('div');
+    const loschenDiv = document.createElement('div');
 
     try {
-      const response = await fetch('/getveranstaltung');
+      const response = await window.fetch('/getveranstaltung');
       const veranstaltungen = await response.json();
       vers = veranstaltungen;
     } catch (error) {
@@ -22,9 +20,12 @@ function veranstaltungenAnzeigen () {
     }
 
     veranstaltungenPrint(vers, listanzeigerDiv);
+    veranstaltunglöschenUndLoschenBtn(vers, loschenDiv);
     main.appendChild(listanzeigerDiv);
+    main.appendChild(loschenDiv);
     window.addEventListener('resize', function () {
       veranstaltungenPrint(vers, listanzeigerDiv);
+      veranstaltunglöschenUndLoschenBtn(vers, loschenDiv);
     });
   })();
 }
@@ -101,14 +102,14 @@ function veranstaltungenPrint (veranstaltungen, myDiv) {
   myDiv.appendChild(paginationInfoDiv);
 }
 
-function printgl (pageNr, gl, mylist, anzitemproSeite) {
-  console.log('gl :', gl);
-  for (let n = (pageNr - 1) * anzitemproSeite; n < gl.length && n < pageNr * anzitemproSeite; n++) {
+function printgl (pageNr, vl, mylist, anzitemproSeite) {
+  console.log('gl :', vl);
+  for (let n = (pageNr - 1) * anzitemproSeite; n < vl.length && n < pageNr * anzitemproSeite; n++) {
     console.log(n);
-    const v = gl[n];
+    const v = vl[n];
 
     const obj = document.createElement('li');
-    const vname = v.veranstaltung;
+    const vname = v.name;
     const vDatum = v.datum;
     const objname = document.createElement('a');
     objname.innerText = 'veranstaltung: ' + vname + ', Datum: ' + vDatum + '.';
@@ -116,6 +117,37 @@ function printgl (pageNr, gl, mylist, anzitemproSeite) {
 
     mylist.appendChild(obj);
   }
+}
+
+function veranstaltunglöschenUndLoschenBtn (verlist, htmlspace) {
+  htmlspace.innerHTML = '';
+  const msg = document.createElement('h4');
+  msg.innerText = 'Die Veranstaltung ';
+  const verName = document.createElement('input');
+  verName.setAttribute('id', 'loschenInputVA');
+  htmlspace.appendChild(msg);
+  htmlspace.appendChild(verName);
+  const loschenBtn = document.createElement('button');
+  loschenBtn.innerText = 'loeschen';
+  loschenBtn.setAttribute('id', 'verLoschenVA');
+  htmlspace.appendChild(loschenBtn);
+  loschenBtn.addEventListener('click', function () {
+    const vername = verName.value;
+    (async function () {
+      await window.fetch('/veranstaltungloschen', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name: vername })
+      }).then(response => {
+        if (response) { return response.json(); }
+      }).catch(error => {
+        console.log(error);
+      });
+    })();
+    veranstaltungenAnzeigen();
+  });
 }
 
 export default veranstaltungenAnzeigen;
