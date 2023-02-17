@@ -4,7 +4,7 @@ function GaestePlatzZuordnen () {
   main.innerHTML = `
   <div id="mainInZuordnen">
   <ul id="list">
-    <h2>Geben Sie den Namen der zu verarbeitenden Veranstaltung ein:</h2>
+    <h2 id= "Text_zuordnen" >Geben Sie den Namen der zu verarbeitenden Veranstaltung ein:</h2>
     <li>name: <br><input id="vername", type="text" >
     
     </ul>
@@ -13,7 +13,9 @@ function GaestePlatzZuordnen () {
   <p id="userdata"></p>
   </div>`;
   const verName = document.getElementById('vername');
+  verName.setAttribute('id', 'vernameZordnen');
   const jsonButton = document.getElementById('btnJSON');
+  jsonButton.setAttribute('id', 'btnJSON_Zuordnen');
 
   jsonButton.addEventListener('click', function () {
     let requiredFields = true;
@@ -144,12 +146,8 @@ function GaestePlatzZuordnen () {
 
   function printgl (pageNr, gl, mylist, anzitemproSeite) {
     for (let n = (pageNr - 1) * anzitemproSeite; n < gl.length && n < pageNr * anzitemproSeite; n++) {
-      // const listanzeigerChildren = listanzeiger.children.length;
-
       const g = gl[n];
-      // if (n >= 1 && g.name === gl[n - 1].name && g.kind === gl[n - 1].kind) {
-      //  gl.splice(n, 1); n--;
-      // } else {
+
       const obj = document.createElement('li');
       const gname = g.name;
       const gkind = g.kind;
@@ -167,59 +165,8 @@ function GaestePlatzZuordnen () {
       obj.appendChild(objstatus);
       mylist.appendChild(obj);
     }
-    /* for (let n = 0; n < gl.length; n++) {
-      // const listanzeigerChildren = listanzeiger.children.length;
-      const g = gl[n];
-      //if (n >= 1 && g.name === gl[n - 1].name && g.kind === gl[n - 1].kind) {
-      //  gl.splice(n, 1); n--;
-      //} else {
-        const obj = document.createElement('li');
-        const gname = g.name;
-        const gkind = g.kind;
-        const gstatus = g.status;
-        const objname = document.createElement('a');
-        objname.innerText = 'Gast Nr.' + (n + 1) + ': name: ' + gname + ', ';
-        const objkind = document.createElement('a');
-        objkind.innerText = 'kind: ' + gkind + ', ';
-        const objstatus = document.createElement('a');
-        objstatus.innerText = 'status: ' + gstatus;
-        obj.appendChild(objname);
-        // obj.appendChild(br);
-        obj.appendChild(objkind);
-        // obj.appendChild(br);
-        obj.appendChild(objstatus);
-        console.log(listanzeiger.children[n]);
-        listanzeiger.appendChild(obj);
-        elements++;
-
-        // if (n >= listanzeigerChildren) { listanzeiger.appendChild(obj); }
-      //} */
   }
 
-  /* function plgastordnerlistPrint (rTische, sitzeProTisch, bestuhlung, plgastordnerlist, vername) {
-    const spDiv = document.getElementById('sitzplananzeiger');
-    spDiv.innerHTML = '';
-    const splist = document.createElement('ul');
-    function allePlatze () {
-      const obj = document.createElement('label');
-      obj.innerText = 'Veranstaltung: ' + vername;
-      // obj.innerHTML += '<br>';
-      const obj1 = document.createElement('li');
-      obj1.innerText = 'Es gibt ' + rTische + ' Tische, jeder hat ' + sitzeProTisch + ' Sitzplätze.';
-
-      const obj2 = document.createElement('li');
-      obj2.innerText = 'Bestuhlung der Tische ist: ' + bestuhlung;
-      // for(int i = 0 ; i < plgastordnerlist.length; i++)
-      // {
-
-      // }
-      splist.appendChild(obj);
-      splist.appendChild(obj1);
-      splist.appendChild(obj2);
-    }
-    allePlatze();
-    spDiv.appendChild(splist);
-  } */
   function plgastordnerlistPrint (rTische, sitzeProTisch, bestuhlung, plgastordnerlist, vername) {
     const header = document.getElementById('bodyheader');
     header.innerHTML = '<h5 id="back">zurück zur Hauptseite</h5><h2></h2>' + '<h5>  für die Veranstaltung ' + vername + ' gibt es ' + rTische +

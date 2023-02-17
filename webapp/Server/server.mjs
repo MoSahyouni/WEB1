@@ -24,21 +24,6 @@ server.get('/json', (request, response) => {
   });
 });
 
-/* server.post('/veranstaltungerzeugen', (req, res) => {
-  MongoClient.connect('mongodb://localhost:27017', function (err, db) {
-    if (err) throw err;
-    const dbo = db.db('DatenBank');
-    dbo.collection('veranstaltungen').insertOne({
-      veranstaltung: req.body.vername
-    },
-    function (err, result) {
-      if (err) throw err;
-      res.json(result);
-      db.close();
-    });
-  });
-}); */
-
 server.post('/veranstaltungerzeugen', async (req, res) => {
   const client = new MongoClient('mongodb://localhost:27017');
   try {
@@ -64,7 +49,7 @@ server.post('/veranstaltungerzeugen', async (req, res) => {
     client.close();
   }
 });
-// const router = express.Router();
+
 server.get('/getveranstaltung', (req, res) => {
   (async function () {
     const client2 = new MongoClient('mongodb://localhost:27017');
@@ -85,27 +70,6 @@ server.get('/getveranstaltung', (req, res) => {
   })();
 });
 
-/* server.post('/gasterzeugen', async (req, res) => {
-  const client = new MongoClient('mongodb://localhost:27017');
-  try {
-    await client.connect();
-    const db = client.db('DatenBank');
-    const gäste = db.collection('Gäste');
-    const result = await gäste.insertMany({
-      name: req.body.name,
-      kind: req.body.kind,
-      status: req.body.status
-    });
-    console.log(req.body);
-
-    res.json(result);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'An error occured while creating the event' });
-  } finally {
-    client.close();
-  }
-}); */
 server.post('/gasterzeugen', async (req, res) => {
   const client = new MongoClient('mongodb://localhost:27017');
   try {
@@ -136,21 +100,7 @@ server.post('/gasterzeugen', async (req, res) => {
 
 server.post('/gastplaetzezuordnunganliegen', async (req, res) => {
   console.log(req.body.veranstaltungsname);
-  /* MongoClient.connect('mongodb://localhost:27017', function (err, db) {
-    if (err) throw err;
-    const dbo = db.db('DatenBank');
-    const Ver = { veranstaltungsname: req.body.veranstaltungsname };
-    const newvalues = { $set: { Sitzplan: req.body.Sitzplan } };
-    dbo.collection('veranstaltungen').updateOne({ name: req.body.veranstaltungsname }, newvalues, function (err, res) {
-      if (err) throw err;
-      console.log('veranstaltung updated');
-      db.close();
-    });
-    dbo.collection('Sitzpläne').updateOne(Ver, newvalues, function (err, res) {
-      if (err) throw err;
-      console.log('veranstaltung updated');
-      db.close();
-    }); */
+
   const client3 = new MongoClient('mongodb://localhost:27017');
   try {
     await client3.connect();
@@ -176,60 +126,5 @@ server.post('/gastplaetzezuordnunganliegen', async (req, res) => {
     client3.close();
   }
 });
-/*
-  const client = new MongoClient('mongodb://localhost:27017');
-  let Collection;
-
-  async function connectToMongo () {
-    try {
-      await client.connect();
-      Collection = client.db('DatenBank').collection('veranstaltungen');
-    } catch (error) {
-      console.error('Error connecting', error);
-    }
-  }
-
-  connectToMongo();
-
-  server.get('/veranstaltungenAnzeigen', async (req, res) => {
-    try {
-      const veranstaltungen = await Collection.find({}).toArray();
-      res.json(veranstaltungen);
-    } catch (error) {
-      console.error('Error :', error);
-      res.sendStatus(500);
-    }
-  });
-*/
-/* const client = new MongoClient('mongodb://localhost:27017');
-  try {
-    await client.connect();
-    const db = client.db('DatenBank');
-    const sitzplaene = db.collection('Sitzpläne');
-    const newValues = { $set: { Sitzplan: req.body.Sitzplan } };
-    const result = await sitzplaene.updateOne({ verastaltungsname: req.body.veranvaeranstaltungsname }, newValues, function (err, res) {
-      if (err) throw err;
-      console.log('veranstaltung updated');
-    });
-
-     MongoClient.connect('mongodb://localhost:27017', function (err, db) {
-      if (err) throw err;
-      const dbo = db.db('DatenBank');
-      const Ver = { veranstaltung: req.body.veranvaeranstaltungsname };
-      const newvalues = { $set: { gaestelist: req.body.Gästelist } };
-      dbo.collection('veranstaltungen').updateOne(Ver, newvalues, function (err, res) {
-        if (err) throw err;
-        console.log('veranstaltung updated');
-        db.close();
-      });
-    });
-
-    res.json(result);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'An error occured while creating the event' });
-  } finally {
-    client.close();
-  } */
 
 server.listen(port, console.log('server listening on port ' + port));

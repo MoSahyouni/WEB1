@@ -3,9 +3,9 @@ import gaestelistAnliegen from './gastliste.mjs';
 import GaestePlatzZuordnen from './SitzplanZuordnungAnliegen.mjs';
 import veranstaltungenAnzeigen from './veranstaltungenAnzeigen.mjs';
 
-const verAn = VerAnlegen; // verAn verweist auf Funktion VerAnlagen
+const verAn = VerAnlegen;
 const header = document.getElementById('bodyheader');
-header.innerHTML = '<h2>Veranstaltungsplanner</h2>';
+header.innerHTML = '<h2 id = "hauptTitel">Veranstaltungsplanner</h2>';
 
 function ButtonBack () {
   const header = document.getElementById('bodyheader');
@@ -24,7 +24,6 @@ btn.setAttribute('id', 'btn');
 btn.addEventListener('click', () => {
   ButtonBack();
   veranstaltungenAnzeigen();
-  // main.innerHTML = '<h4> Es gibt aktuell keine Veranstaltungen.</h4>';
 });
 const btn2 = document.createElement('button');
 btn2.textContent = 'neue Veranstaltung';
@@ -54,20 +53,3 @@ mainDiv.appendChild(btn);
 
 mainDiv.appendChild(gastlistErstellen);
 mainDiv.appendChild(gaesteplaetzeZuordnen);
-/*
-const slides = document.querySelectorAll('.slide');
-
-let currentSlide = 0;
-
-function changeSlide () {
-  for (let i = 0; i < slides.length; i++) {
-    slides[i].classList.remove('active');
-  }
-  slides[currentSlide].classList.add('active');
-}
-
-setInterval(function () {
-  currentSlide = (currentSlide + 1) % slides.length;
-  changeSlide();
-}, 3000);
-*/

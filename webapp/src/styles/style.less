@@ -10,6 +10,7 @@ main {
   padding: 2em;
   background-color: white;
   border-radius: 20px;
+  margin-top: 5em;
 }
 #Main {
   font-family: Arial, sans-serif;
@@ -17,13 +18,26 @@ main {
   text-align: center;
   background-color: #d3cece;
   padding: 20px;
+  
 }
+
+#hauptTitel{
+  margin-top: 1.5em
+ }
 header {
-  font-style: oblique;
-  align-items: center;
-  shape-rendering: crispEdges;
-  align-content: space-between;
-}
+ 
+    background-color: #333;
+    color: white;
+    text-align: center;
+    border-radius: 20px;
+    bottom: 0;
+    
+    font-style: oblique;
+    align-items: center;
+    shape-rendering: crispEdges;
+    align-content: space-between;
+  }
+
 header h2 {
   align-self: center;
 }
@@ -93,6 +107,8 @@ button {
   color-scheme: dark;
   align-items: center;
   flex-direction: column;
+  border-radius: 20px;
+
 }
 #gastloeschenbutton {
   width: 40%;
@@ -111,11 +127,12 @@ button {
 #back {
   display: inline-block;
   padding: 10px 20px;
-  background-color: #fdbf39;
   color: #ffffff;
   text-decoration: none;
-  border-radius: 5px;
+  border-radius: 20px;
   cursor: pointer;
+  margin-right: 90%;
+  margin-top: 0.4em;
 }
 #back:hover {
   background-color: #b94c39;
@@ -127,19 +144,20 @@ button {
   flex-direction: column;
   align-items: center;
 }
-header {
-  background-color: #333;
-  color: white;
-  text-align: center;
-  border-radius: 20px;
-  bottom: 0;
+#bodyheader{
+  width: 100%;
+  height: 4em;
+  
 }
+
 footer {
   background-color: #333;
   color: white;
-  padding: 35px;
+  padding: 15px;
   text-align: center;
   border-radius: 20px;
+  margin-top: 0em;
+  height: 2em;
 }
 #verZeit {
   width: 785px;
@@ -152,6 +170,7 @@ footer {
 #btnJSON {
   float: right;
   width: 100%;
+  padding: 0;
 }
 input[type="submit"] {
   background-color: #4CAF50;
@@ -185,9 +204,13 @@ li {
   font-size: 18px;
   width: 100%;
 }
+
+
 #Text1 {
   text-align: center;
-  width: 170%;
+  width: 100%;
+  margin-left: 10em;
+  
 }
 #paginationarrow {
   background-color: silver;
@@ -195,10 +218,13 @@ li {
   width: 50%;
   border-radius: 10px;
   cursor: pointer;
-  margin-left: 25%;
+  margin-left:25%;
+ 
 }
 #paginationPage {
   display: contents;
+  margin-block: 19em;
+  margin-top: 1em;
 }
 #listanzeiger {
   text-align: left;
@@ -306,6 +332,32 @@ input:hover,
 
 #mainDiv #gastbtn {
   width: 50%;
+}
+
+#btn2,#btn,#gserstellen,#Sitzplätzezuordnen{
+  width: 100%;
+  margin: 1.5em;
+}
+
+#mainInZuordnen{
+  margin-top: 10em;
+  padding: 5em;
+}
+
+#Text_zuordnen {
+  margin-block: 2em;
+  margin-top: 0em;
+}
+
+#vernameZordnen {
+  margin-top: 1em;
+ 
+}
+#btnJSON_Zuordnen{
+  padding: 0em;
+  margin-top: 2em;
+  width: 80%;
+  border-radius:10px; ;
 }
 /*
 #gbearbeitendiv{

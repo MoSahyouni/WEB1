@@ -171,25 +171,20 @@ function gaestelistAnliegen () {
       if (gastNrinput.value === '' || isNaN(gastNrinput.value) || gastNrinput.value > GaesteList.length) { window.alert('bitte GastNr. eingeben.'); } else {
         const gastnr = gastNrinput.value;
 
-        // hier
-        // removeListanzigerchildren();
         GaesteList.splice(gastnr - 1, 1);
         gaestelistPrint(GaesteList, listanzeiger1);
-      // gastbearbeiten();
       }
     });
   }
   let aktuellSeiteGL = 1;
   function gaestelistPrint (gl, myDiv) {
-    // window.addEventListener('resize', function () { gaestelistPrint(gl, myDiv); });
     const block = document.createElement('li');
     block.innerHTML = '<li><a>Gast Nr.8: name: 8, </a><a>kind: Ja, </a><a>status: unbekannt</a></li>';
 
     myDiv.appendChild(block);
     const blockHeight = block.clientHeight + 8;
     block.remove();
-    // pagination aktuelle Seite
-    // let aktuellSeite = 1;
+
     myDiv.innerHTML = '';
     const msg1 = document.createElement('h3');
     msg1.innerText = 'Gäste in der Gästeliste: ';
@@ -247,8 +242,6 @@ function gaestelistAnliegen () {
     myDiv.appendChild(paginationInfoDiv);
     function printgl (pageNr, gl, mylist, anzitemproSeite) {
       for (let n = (pageNr - 1) * anzitemproSeite; n < gl.length && n < pageNr * anzitemproSeite; n++) {
-        // const listanzeigerChildren = listanzeiger.children.length;
-
         const g = gl[n];
         if (n >= 1 && g.name === gl[n - 1].name && g.kind === gl[n - 1].kind) {
           gl.splice(n, 1); n--;
@@ -264,9 +257,9 @@ function gaestelistAnliegen () {
           const objstatus = document.createElement('a');
           objstatus.innerText = 'status: ' + gstatus;
           obj.appendChild(objname);
-          // obj.appendChild(br);
+
           obj.appendChild(objkind);
-          // obj.appendChild(br);
+
           obj.appendChild(objstatus);
           mylist.appendChild(obj);
         }

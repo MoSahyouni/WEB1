@@ -35,11 +35,10 @@ function veranstaltungenPrint (veranstaltungen, myDiv) {
   block.innerHTML = '<li><a>veranstaltung: testttttt, </a><a>Datum 14.12.2222 14:55</li>';
 
   myDiv.appendChild(block);
-  // const blockHeight = block.clientHeight;
+
   block.remove();
   myDiv.innerHTML = '';
-  // pagination aktuelle Seite
-  // let aktuellSeite = 1;
+
   const wHeight = window.innerHeight - 230;
   const mylist = document.createElement('ul');
   mylist.setAttribute('id', 'listanzeiger');
@@ -105,65 +104,18 @@ function veranstaltungenPrint (veranstaltungen, myDiv) {
 function printgl (pageNr, gl, mylist, anzitemproSeite) {
   console.log('gl :', gl);
   for (let n = (pageNr - 1) * anzitemproSeite; n < gl.length && n < pageNr * anzitemproSeite; n++) {
-    // const listanzeigerChildren = listanzeiger.children.length;
     console.log(n);
     const v = gl[n];
-    // if (n >= 1 && g.name === gl[n - 1].name && g.kind === gl[n - 1].kind) {
-    //  gl.splice(n, 1); n--;
-    // } else {
+
     const obj = document.createElement('li');
     const vname = v.veranstaltung;
     const vDatum = v.datum;
     const objname = document.createElement('a');
     objname.innerText = 'veranstaltung: ' + vname + ', Datum: ' + vDatum + '.';
     obj.appendChild(objname);
-    // obj.appendChild(br);
+
     mylist.appendChild(obj);
   }
 }
-
-/* const AnzahlElementeProSeite = 5;
-
- function Anzeigeseite (Elemente, SeitenNr) {
-  const startIndex = (SeitenNr - 1) * AnzahlElementeProSeite;
-  const endIndex = startIndex + AnzahlElementeProSeite;
-  const aktuelleSeitenElemente = Elemente.slice(startIndex, endIndex);
-
-  const veranstaltungenContainer = document.createElement('div');
-  const header = document.getElementById('Main');
-  header.innerHTML = '';
-
-  for (const Element of aktuelleSeitenElemente) {
-    const veranstaltungElement = document.createElement('div');
-    veranstaltungElement.innerHTML = '<h3>' + Element.veranstaltung + '</h3>' + Element.datum + '</p>';
-    veranstaltungenContainer.appendChild(veranstaltungElement);
-  }
-
-  const paginationContainer = document.createElement('div');
-  const Seitenzahl = Math.ceil(Elemente.length / AnzahlElementeProSeite);
-
-  const previousButton = document.createElement('button');
-  previousButton.innerHTML = '&larr;';
-  if (SeitenNr === 1) {
-    previousButton.disabled = true;
-  }
-  previousButton.addEventListener('click', () => {
-    Anzeigeseite(Elemente, SeitenNr - 1);
-  });
-  paginationContainer.appendChild(previousButton);
-
-  const nextButton = document.createElement('button');
-  nextButton.innerHTML = '&rarr;';
-  if (SeitenNr === Seitenzahl) {
-    nextButton.disabled = true;
-  }
-  nextButton.addEventListener('click', () => {
-    Anzeigeseite(Elemente, SeitenNr + 1);
-  });
-  paginationContainer.appendChild(nextButton);
-
-  header.appendChild(veranstaltungenContainer);
-  header.appendChild(paginationContainer);
-} */
 
 export default veranstaltungenAnzeigen;
