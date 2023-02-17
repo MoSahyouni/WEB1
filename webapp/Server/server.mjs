@@ -84,8 +84,8 @@ server.post('/gasterzeugen', async (req, res) => {
       console.log('veranstaltung updated');
     });
     const result = await gäste.insertOne({
-      veranvaeranstaltungsname: req.body.vname,
-      gästeliste: req.body.Gästelist
+      veranstaltungsname: req.body.vname,
+      gaestelist: req.body.Gästelist
 
     });
 
@@ -124,6 +124,39 @@ server.post('/gastplaetzezuordnunganliegen', async (req, res) => {
     res.status(500).json({ error: 'An error occured while creating the event' });
   } finally {
     client3.close();
+  }
+});
+server.post('/gastelisteAktualisieren', async (req, res) => {
+  console.log(req.body.vname);
+
+  const client4 = new MongoClient('mongodb://localhost:27017');
+  try {
+    await client4.connect();
+    const db = client4.db('DatenBank');
+    const gl = db.collection('GästeListen');
+
+    const Ver = { name: req.body.vname };
+    const newvalues = { $set: { gaestelist: req.body.Gästelist, Sitzplan: req.body.sitzplan } };
+    db.collection('veranstaltungen').updateOne(Ver, newvalues, function (err, res) {
+      if (err) throw err;
+    });
+    const VerSitzplan = { veranstaltungsname: req.body.vname };
+    const newvaluesSitzplan = { $set: { Sitzplan: req.body.sitzplan } };
+    db.collection('Sitzpläne').updateOne(VerSitzplan, newvaluesSitzplan, function (err, res) {
+      if (err) throw err;
+    });
+    const ver2 = { veranstaltungsname: req.body.vname };
+    const newvalues2 = { $set: { gaestelist: req.body.Gästelist } };
+    const result = await gl.updateOne(ver2, newvalues2, function (err, res) {
+      if (err) throw err;
+    });
+
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occured while creating the event' });
+  } finally {
+    client4.close();
   }
 });
 

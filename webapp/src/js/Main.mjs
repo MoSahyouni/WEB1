@@ -2,7 +2,7 @@ import VerAnlegen from './VerAnlegen.mjs';
 import gaestelistAnliegen from './gastliste.mjs';
 import GaestePlatzZuordnen from './SitzplanZuordnungAnliegen.mjs';
 import veranstaltungenAnzeigen from './veranstaltungenAnzeigen.mjs';
-
+import EinladungStatusBearbeiten from './einladungsstatus.mjs';
 const verAn = VerAnlegen;
 const header = document.getElementById('bodyheader');
 header.innerHTML = '<h2 id = "hauptTitel">Veranstaltungsplanner</h2>';
@@ -47,9 +47,18 @@ gaesteplaetzeZuordnen.addEventListener('click', () => {
   GaestePlatzZuordnen();
 });
 
+const einladungstatusaendern = document.createElement('button');
+einladungstatusaendern.textContent = 'Einladung status bearbeiten';
+einladungstatusaendern.setAttribute('id', 'einladungstatusaendern');
+einladungstatusaendern.addEventListener('click', () => {
+  ButtonBack();
+  EinladungStatusBearbeiten();
+});
+
 main.appendChild(mainDiv);
 mainDiv.appendChild(btn2);
 mainDiv.appendChild(btn);
 
 mainDiv.appendChild(gastlistErstellen);
 mainDiv.appendChild(gaesteplaetzeZuordnen);
+mainDiv.appendChild(einladungstatusaendern);
