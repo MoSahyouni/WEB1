@@ -186,7 +186,11 @@ function gaestelistAnliegen () {
     const msg1 = document.createElement('h3');
     msg1.innerText = 'Gäste in der Gästeliste: ';
     myDiv.appendChild(msg1);
-    const wHeight = window.innerHeight - 230;
+    // const wHeight = window.innerHeight - 230;
+    let wHeight = window.innerHeight - 260;
+    if (wHeight > 500) {
+      wHeight = 500;
+    }
     const mylist = document.createElement('ul');
     mylist.setAttribute('id', 'listanzeiger');
     myDiv.appendChild(mylist);
@@ -200,7 +204,7 @@ function gaestelistAnliegen () {
     // finding the number of pagenation pages
     let anzitemproSeite = parseInt(wHeight / parseInt(blockHeight));
     if (anzitemproSeite <= 0) { anzitemproSeite = 1; }
-    if (anzitemproSeite >= 16) { anzitemproSeite = 15; }
+    // if (anzitemproSeite >= 16) { anzitemproSeite = 15; }
     let anzpages = 0;
     if (parseInt(gl.length / anzitemproSeite) <= 0) { anzpages = 1; } else { anzpages = parseInt(gl.length / anzitemproSeite); }
     if (anzpages <= 0) { anzpages = gl.length; }

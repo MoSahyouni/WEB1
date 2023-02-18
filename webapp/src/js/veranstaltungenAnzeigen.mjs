@@ -44,7 +44,10 @@ function veranstaltungenPrint (veranstaltungen, myDiv) {
     wHeight = window.innerHeight - 230;
     if (wHeight <= 0) { wHeight = 100; }
   } */
-  const wHeight = window.innerHeight - 260;
+  let wHeight = window.innerHeight - 260;
+  if (wHeight > 500) {
+    wHeight = 500;
+  }
   const mylist = document.createElement('ul');
   mylist.setAttribute('id', 'listanzeiger');
   const lMsg = document.createElement('a');

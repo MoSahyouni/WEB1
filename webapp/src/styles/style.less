@@ -14,6 +14,17 @@ main {
   padding: 20px;
   max-height: 620px;
 }
+.mainzuoednen {
+  max-width: 1500px;
+}
+.mainzuoednen #zuordnendiv {
+  margin-left: 250px;
+}
+.mainzuoednen #PLanzeiger li #platzptnloschen {
+  height: 30px;
+  margin-left: 0px;
+  margin-right: 5px;
+}
 #hauptTitel {
   margin-top: 1.5em;
   padding-top: 17px;
@@ -60,8 +71,9 @@ input[required] {
   padding-left: 6%;
 }
 #paginationDiv {
-  display: block ruby;
-  max-height: 10%;
+    display: flex;
+    max-height: 10%;
+    display: block ruby;
 }
 #paginationDiv #paginationarrow {
   background-color: silver;
@@ -76,14 +88,14 @@ input[required] {
   background-color: #7c7777;
 }
 #paginationDiv #paginationPage {
-  background-color: #474747;
-  color: silver;
-  display: block;
-  width: 40px;
-  border-radius: 20px;
-  cursor: pointer;
-  margin-left: 4px;
-  margin-right: 4px;
+    color: #1a1818;
+    display: block;
+    width: 40px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-left: 4px;
+    margin-right: 4px;
+
 }
 #mainSeiteDiv {
   align-self: center;
@@ -225,7 +237,7 @@ button {
   width: 25%;
   height: 30px;
   margin-top: 5px;
-  font-size: 15px;
+  font-size: 14px;
   border-radius: 20px;
   color-scheme: dark;
 }
@@ -300,6 +312,7 @@ input:hover,
   border-radius: 6px;
   height: 28px;
   width: 60px;
+  margin-left: 3px;
 }
 #PLanzeiger #zuordSpeichern {
   margin-left: 29.5%;
@@ -327,8 +340,9 @@ input:hover,
   width: 80%;
 }
 #mainDiv #gastbtn {
-  width: 50%;
-}
+  width:55%;
+  margin-left:22%; 
+ }
 #btn2,
 #btn,
 #gserstellen,
