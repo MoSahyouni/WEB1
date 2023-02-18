@@ -33,14 +33,18 @@ function veranstaltungenAnzeigen () {
 let aktuellSeiteGL = 1;
 function veranstaltungenPrint (veranstaltungen, myDiv) {
   const block = document.createElement('li');
-  block.innerHTML = '<li><a>veranstaltung: testttttt, </a><a>Datum 14.12.2222 14:55</li>';
+  block.innerHTML = '<a>veranstaltung: testttttt, </a><a>Datum 14.12.2222 14:55';
 
   myDiv.appendChild(block);
-
   block.remove();
   myDiv.innerHTML = '';
 
-  const wHeight = window.innerHeight - 230;
+  /* let wHeight = document.getElementById('Main').clientHeight;
+  if (wHeight > window.innerHeight) {
+    wHeight = window.innerHeight - 230;
+    if (wHeight <= 0) { wHeight = 100; }
+  } */
+  const wHeight = window.innerHeight - 260;
   const mylist = document.createElement('ul');
   mylist.setAttribute('id', 'listanzeiger');
   const lMsg = document.createElement('a');
@@ -55,7 +59,7 @@ function veranstaltungenPrint (veranstaltungen, myDiv) {
   rarrow.setAttribute('id', 'paginationarrow');
   rarrow.innerText = '\u2192';
   // finding the number of pagenation pages
-  let anzitemproSeite = parseInt(wHeight / 20);
+  let anzitemproSeite = parseInt(wHeight / 25);
   if (anzitemproSeite <= 0) { anzitemproSeite = 1; }
   let anzpages = 0;
   if (parseInt(veranstaltungen.length / anzitemproSeite) <= 0) { anzpages = 1; } else { anzpages = parseInt(veranstaltungen.length / anzitemproSeite); }
