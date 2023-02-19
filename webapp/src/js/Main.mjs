@@ -19,28 +19,28 @@ const main = document.getElementsByClassName('Main')[0];
 const mainDiv = document.createElement('div');
 mainDiv.setAttribute('id', 'mainSeiteDiv');
 const btn = document.createElement('button');
-btn.textContent = ' meine Veransaltungen';
+btn.textContent = ' Alle Veransaltungen';
 btn.setAttribute('id', 'btn');
 btn.addEventListener('click', () => {
   ButtonBack();
   veranstaltungenAnzeigen();
 });
 const btn2 = document.createElement('button');
-btn2.textContent = 'neue Veranstaltung';
+btn2.textContent = 'Anlegen der Veranstaltung ';
 btn2.setAttribute('id', 'btn2');
 btn2.addEventListener('click', () => {
   ButtonBack();
   verAn();
 });
 const gastlistErstellen = document.createElement('button');
-gastlistErstellen.textContent = 'Gaestelist erstellen';
+gastlistErstellen.textContent = 'Erstellung der Gästeliste';
 gastlistErstellen.setAttribute('id', 'gserstellen');
 gastlistErstellen.addEventListener('click', () => {
   ButtonBack();
   gaestelistAnliegen();
 });
 const gaesteplaetzeZuordnen = document.createElement('button');
-gaesteplaetzeZuordnen.textContent = 'Sitzplätze zuordnen';
+gaesteplaetzeZuordnen.textContent = 'Zuordnung der Sitzplätze';
 gaesteplaetzeZuordnen.setAttribute('id', 'Sitzplätzezuordnen');
 gaesteplaetzeZuordnen.addEventListener('click', () => {
   ButtonBack();
@@ -48,7 +48,7 @@ gaesteplaetzeZuordnen.addEventListener('click', () => {
 });
 
 const einladungstatusaendern = document.createElement('button');
-einladungstatusaendern.textContent = 'Einladung status bearbeiten';
+einladungstatusaendern.textContent = 'Bearbeitung des Einladungsstatus';
 einladungstatusaendern.setAttribute('id', 'einladungstatusaendern');
 einladungstatusaendern.addEventListener('click', () => {
   ButtonBack();

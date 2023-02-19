@@ -17,7 +17,7 @@ function EinladungStatusBearbeiten () {
   let versitzplan = null;
   let GaesteList = null;
   let listSpace = null;
-  // const gaestelistanzeiger = document.getElementById('gaestelistanzeiger');
+
   const checkBtn = document.getElementById('btnJSON');
   checkBtn.addEventListener('click', function () {
     (async function () {
@@ -50,7 +50,7 @@ function EinladungStatusBearbeiten () {
   function buttonundeventlistenerSpeicherBTN (listSpace2) {
     const gastlisbtn = document.createElement('button');
     gastlisbtn.setAttribute('id', 'gaesterstellen');
-    gastlisbtn.innerText = 'Gästelist zeigen';
+    gastlisbtn.innerText = 'Gästeliste speichern';
     listSpace2.appendChild(gastlisbtn);
     gastlisbtn.addEventListener('click', function (event) {
       event.preventDefault();
@@ -61,12 +61,10 @@ function EinladungStatusBearbeiten () {
           const neueDaten = GaesteList[n];
           if (inZuoudnung.name === neueDaten.name && inZuoudnung.status !== neueDaten.status) {
             inZuoudnung.status = neueDaten.status;
-            // sitzplanZuordnung[i] = inZuoudnung;
           }
         }
       }
       versitzplan.gästezuordnung = sitzplanZuordnung;
-      // Check if the event exists
 
       (async function () {
         window.fetch('/gastelisteAktualisieren', {
@@ -83,10 +81,6 @@ function EinladungStatusBearbeiten () {
       })();
     });
   }
-  // const br = document.createElement('br');
-
-  // wenn gasteAnzahl === 0 && GaesteList.length !== 0, erstellt es einen Button 'gastlisbtn' mit dem Text "Gästelist erstellen"
-
   function gastbearbeiten () {
     const gbearbeitendiv = document.createElement('div');
     gbearbeitendiv.setAttribute('id', 'gbearbeitendiv2');
@@ -95,7 +89,7 @@ function EinladungStatusBearbeiten () {
     const gastNrinput = document.createElement('input');
     gastNrinput.setAttribute('id', 'inputbearbeitundloeschen');
     const gastbearbeitenbutton = document.createElement('button');
-    gastbearbeitenbutton.innerText = 'bearbeiten';
+    gastbearbeitenbutton.innerText = 'Bearbeiten';
     gastbearbeitenbutton.setAttribute('id', 'gastbearbeitenbutton');
     gbearbeitendiv.appendChild(gbearbeitenMsg);
     gbearbeitendiv.appendChild(gastNrinput);
@@ -131,8 +125,7 @@ function EinladungStatusBearbeiten () {
 
           GaesteList[gastnr - 1] = gastinfo;
           gbearbeitendiv.remove();
-          // removeListanzigerchildren();
-          // hier
+
           gaestelistPrint(GaesteList, listSpace);
           gastbearbeiten();
         });
@@ -156,14 +149,14 @@ function EinladungStatusBearbeiten () {
     const mylist = document.createElement('ul');
     mylist.setAttribute('id', 'listanzeiger');
     myDiv.appendChild(mylist);
-    // creating pagination arrows
+
     const larrow = document.createElement('span');
     larrow.innerText = '\u2190';
     larrow.setAttribute('id', 'paginationarrow');
     const rarrow = document.createElement('span');
     rarrow.setAttribute('id', 'paginationarrow');
     rarrow.innerText = '\u2192';
-    // finding the number of pagenation pages
+
     let anzitemproSeite = parseInt(wHeight / parseInt(blockHeight));
     if (anzitemproSeite <= 0) { anzitemproSeite = 1; }
     if (anzitemproSeite >= 16) { anzitemproSeite = 15; }

@@ -3,9 +3,9 @@ function VerAnlegen () {
   <ul id="list">
   
   
-    <h2 id ="headerVerAnlagen" >Varanstaltung</h2>
+    <h2 id ="headerVerAnlagen" >legen Sie Ihre Varanstaltungen an</h2>
     
-    <li id = "VerAnlegentexte">name: <br><input id="vernname", type="text" ></li>
+    <li id = "VerAnlegentexte">Name der Veranstaltung: <br><input id="vernname", type="text" ></li>
     <br>
     <li id = "VerAnlegentexte">Datum und Uhrzeit: <br><input type="datetime-local", name="meeting-time", id="verZeit">
     <br>

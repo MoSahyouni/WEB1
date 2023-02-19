@@ -79,7 +79,7 @@ function GaestePlatzZuordnen () {
   function gaestelistPrint (gl, myDiv) {
     const block = document.createElement('li');
     block.innerHTML = '<li><a>Gast Nr.8: name: 8, </a><a>kind: Ja, </a><a>status: unbekannt</a></li>';
-    myDiv.appendChild(block); const blockHeight = block.clientHeight + 12;
+    myDiv.appendChild(block); let blockHeight = block.clientHeight + 12;
     block.remove();
     myDiv.innerHTML = '';
     // const wHeight = window.innerHeight - 230;
@@ -87,6 +87,7 @@ function GaestePlatzZuordnen () {
     if (wHeight > 500) {
       wHeight = 500;
     }
+    blockHeight = 2144 / window.innerWidth * blockHeight;
     const mylist = document.createElement('ul');
     mylist.setAttribute('id', 'listanzeiger');
     const glMsg = document.createElement('a');
@@ -184,7 +185,7 @@ function GaestePlatzZuordnen () {
     const block = document.createElement('li');
     block.innerHTML = 'platz Nr.n: sitzt den Gast Nr.:<input><button>speicher Platz</button>';
 
-    myDiv.appendChild(block); const blockHeight = block.clientHeight;
+    myDiv.appendChild(block); let blockHeight = block.clientHeight;
     // pagination aktuelle Seite
     // let aktuellSeite = 1;
     myDiv.innerHTML = '';
@@ -193,6 +194,7 @@ function GaestePlatzZuordnen () {
     if (wHeight > 500) {
       wHeight = 500;
     }
+    blockHeight = 2144 / window.innerWidth * blockHeight;
     const mylist = document.createElement('ul');
     mylist.setAttribute('id', 'PLanzeiger');
     const plMsg = document.createElement('a');

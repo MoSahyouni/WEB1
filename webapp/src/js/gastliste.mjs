@@ -3,9 +3,9 @@ function gaestelistAnliegen () {
   Main.innerHTML = `
     <div id="listanzeiger1"></div>
     <div id="mainDiv">
-    <h3 id = "titel1">Gästeliste </h3>
+    <h3 id = "titel1">Gästeliste: </h3>
     <ul>
-    <li>vaeranstaltungsname: <br><input id="vaeranstaltungsname", type="text" ></li>
+    <li>Veranstaltungsname: <br><input id="vaeranstaltungsname", type="text" ></li>
     <li>Name des Gasts: <br><input id="gastname", type="text"  ></li>
     <li>Name des Kinds: <br><select name="gastkind" id="gastkind"  multiple>
                     <option>Ja</option>
@@ -27,7 +27,6 @@ function gaestelistAnliegen () {
   const gastkind = document.getElementById('gastkind');
   const gaststatus = document.getElementById('gasteinladung');
   const gastBtn = document.getElementById('gastbtn');
-  // const gaestelistanzeiger = document.getElementById('gaestelistanzeiger');
 
   const listanzeiger1 = document.getElementById('listanzeiger1');
 
@@ -35,11 +34,10 @@ function gaestelistAnliegen () {
   function buttonundeventlistenerSpeicherBTN () {
     const gastlisbtn = document.createElement('button');
     gastlisbtn.setAttribute('id', 'gaesterstellen');
-    gastlisbtn.innerText = 'Gästelist erstellen';
+    gastlisbtn.innerText = 'Gästeliste erstellen';
     listanzeiger1.appendChild(gastlisbtn);
     gastlisbtn.addEventListener('click', function (event) {
       event.preventDefault();
-      // Check if the event exists
 
       let erg = false;
       (async function () {
@@ -55,7 +53,7 @@ function gaestelistAnliegen () {
         }
 
         if (!erg) {
-          window.alert('Es existiert keine Veranstaltung mit dem gegebenen Namen');
+          window.alert('Es existiert keine Veranstaltung mit den gegebenen Namen');
           console.log(vaeranstaltungsname.value);
         } else {
           if (veri.gaestelist != null) { window.alert('Es existiert eine Gästeliste für diese Veranstaltung'); } else {
@@ -77,7 +75,7 @@ function gaestelistAnliegen () {
       })();
     });
   }
-  // const br = document.createElement('br');
+
   let gasteAnzahl = 0;
   gastBtn.addEventListener('click', function () {
     let requiredFields = true;
@@ -85,13 +83,13 @@ function gaestelistAnliegen () {
     if (vaeranstaltungsname.value === '') { requiredFields = false; }
     if (gastkind.value === '') { requiredFields = false; }
     if (gaststatus.value === '') { requiredFields = false; }
-    if (requiredFields === false) { window.alert('bitte alle Felder ausfühlen'); } else {
+    if (requiredFields === false) { window.alert('Bitte alle Felder ausfüllen'); } else {
       const gast = { name: gastname.value, kind: gastkind.value, status: gaststatus.value };
       GaesteList.push(gast);
-      // if (listanzeiger.children.length > 0) { removeListanzigerchildren(); }
+
       gaestelistPrint(GaesteList, listanzeiger1);
     }
-    // wenn gasteAnzahl === 0 && GaesteList.length !== 0, erstellt es einen Button 'gastlisbtn' mit dem Text "Gästelist erstellen"
+
     if (gasteAnzahl === 0 && GaesteList.length !== 0) {
       gasteAnzahl++;
     }
@@ -106,10 +104,10 @@ function gaestelistAnliegen () {
     const gastNrinput = document.createElement('input');
     gastNrinput.setAttribute('id', 'inputbearbeitundloeschen');
     const gastbearbeitenbutton = document.createElement('button');
-    gastbearbeitenbutton.innerText = 'bearbeiten';
+    gastbearbeitenbutton.innerText = 'Bearbeiten';
     gastbearbeitenbutton.setAttribute('id', 'gastbearbeitenbutton');
     const gastloeschenbutton = document.createElement('button');
-    gastloeschenbutton.innerText = 'löschen';
+    gastloeschenbutton.innerText = 'Löschen';
     gastloeschenbutton.setAttribute('id', 'gastloeschenbutton');
     gbearbeitendiv.appendChild(gbearbeitenMsg);
     gbearbeitendiv.appendChild(gastNrinput);
@@ -142,7 +140,7 @@ function gaestelistAnliegen () {
                         <option>abgesagt</option>
                         </select>
         </li>
-        <button id="gastspeichern"> speichern</button>`;
+        <button id="gastspeichern"> Speichern</button>`;
         gbearbeitendiv.appendChild(gastinfomsg);
         gbearbeitendiv.appendChild(neuegastinputs);
         const speichernbutton = document.getElementById('gastspeichern');
@@ -157,8 +155,7 @@ function gaestelistAnliegen () {
 
           GaesteList[gastnr - 1] = gastinfo;
           gbearbeitendiv.remove();
-          // removeListanzigerchildren();
-          // hier
+
           gaestelistPrint(GaesteList, listanzeiger1);
           gastbearbeiten();
         });
@@ -186,7 +183,7 @@ function gaestelistAnliegen () {
     const msg1 = document.createElement('h3');
     msg1.innerText = 'Gäste in der Gästeliste: ';
     myDiv.appendChild(msg1);
-    // const wHeight = window.innerHeight - 230;
+
     let wHeight = window.innerHeight - 260;
     if (wHeight > 500) {
       wHeight = 500;
@@ -194,17 +191,17 @@ function gaestelistAnliegen () {
     const mylist = document.createElement('ul');
     mylist.setAttribute('id', 'listanzeiger');
     myDiv.appendChild(mylist);
-    // creating pagination arrows
+
     const larrow = document.createElement('span');
     larrow.innerText = '\u2190';
     larrow.setAttribute('id', 'paginationarrow');
     const rarrow = document.createElement('span');
     rarrow.setAttribute('id', 'paginationarrow');
     rarrow.innerText = '\u2192';
-    // finding the number of pagenation pages
+
     let anzitemproSeite = parseInt(wHeight / parseInt(blockHeight));
     if (anzitemproSeite <= 0) { anzitemproSeite = 1; }
-    // if (anzitemproSeite >= 16) { anzitemproSeite = 15; }
+
     let anzpages = 0;
     if (parseInt(gl.length / anzitemproSeite) <= 0) { anzpages = 1; } else { anzpages = parseInt(gl.length / anzitemproSeite); }
     if (anzpages <= 0) { anzpages = gl.length; }

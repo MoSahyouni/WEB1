@@ -39,11 +39,6 @@ function veranstaltungenPrint (veranstaltungen, myDiv) {
   block.remove();
   myDiv.innerHTML = '';
 
-  /* let wHeight = document.getElementById('Main').clientHeight;
-  if (wHeight > window.innerHeight) {
-    wHeight = window.innerHeight - 230;
-    if (wHeight <= 0) { wHeight = 100; }
-  } */
   let wHeight = window.innerHeight - 260;
   if (wHeight > 500) {
     wHeight = 500;
@@ -54,14 +49,14 @@ function veranstaltungenPrint (veranstaltungen, myDiv) {
   lMsg.innerHTML = '<h2 id = "Text1"> Alle Veranstaltungen:<h2> ';
   mylist.appendChild(lMsg);
   myDiv.appendChild(mylist);
-  // creating pagination arrows
+
   const larrow = document.createElement('span');
   larrow.innerText = '\u2190';
   larrow.setAttribute('id', 'paginationarrow');
   const rarrow = document.createElement('span');
   rarrow.setAttribute('id', 'paginationarrow');
   rarrow.innerText = '\u2192';
-  // finding the number of pagenation pages
+
   let anzitemproSeite = parseInt(wHeight / 25);
   if (anzitemproSeite <= 0) { anzitemproSeite = 1; }
   let anzpages = 0;
@@ -117,9 +112,9 @@ function printgl (pageNr, vl, mylist, anzitemproSeite) {
 
     const obj = document.createElement('li');
     const vname = v.name;
-    const vDatum = v.datum;
+
     const objname = document.createElement('a');
-    objname.innerText = 'veranstaltung: ' + vname + ', Datum: ' + vDatum + '.';
+    objname.innerText = 'Veranstaltung: ' + vname + '.';
     obj.appendChild(objname);
 
     mylist.appendChild(obj);
@@ -131,7 +126,7 @@ function veranstaltunglöschenUndLoschenBtn (verlist, htmlspace) {
   htmlspace.setAttribute('id', 'divVL');
   const msg = document.createElement('a');
   msg.setAttribute('id', 'loschenvMsgVL');
-  msg.innerText = 'Die Veranstaltung ';
+  msg.innerText = ' Veranstaltung löschen: ';
   const verName = document.createElement('input');
   verName.setAttribute('id', 'loschenInputVA');
   htmlspace.appendChild(msg);
