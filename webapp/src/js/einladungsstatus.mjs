@@ -57,6 +57,7 @@ function EinladungStatusBearbeiten () {
       const sitzplanZuordnung = versitzplan.gästezuordnung;
       for (let i = 0; i < sitzplanZuordnung.length; i++) {
         const inZuoudnung = sitzplanZuordnung[i];
+        if (inZuoudnung === null) { continue; }
         for (let n = 0; n < GaesteList.length; n++) {
           const neueDaten = GaesteList[n];
           if (inZuoudnung.name === neueDaten.name && inZuoudnung.status !== neueDaten.status) {

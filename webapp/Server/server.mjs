@@ -181,13 +181,13 @@ server.post('/gastelisteAktualisieren', async (req, res) => {
 });
 const router = express.Router();
 server.use(router);
-router.get('/R', (req, res) => {
+router.get('/REST', (req, res) => {
   res.json({
     _links: {
       self: { href: `${BASE_URI}` },
       veranstaltungen: { href: `${BASE_URI}/veranstaltungen` },
-      sitzplane: { href: `${BASE_URI}/Sitzplaäne` },
-      gastelisten: { href: `${BASE_URI}/GästeListen` }
+      sitzplane: { href: `${BASE_URI}/sitzplaene` },
+      gastelisten: { href: `${BASE_URI}/gaestelisten` }
 
     }
   });
@@ -223,8 +223,69 @@ async function getAllVeranstaltunegn () {
   }
   ;
 }
-(async function () { await getAllVeranstaltunegn(); })();
 
+let gaestelisten = [];
+const gaestelistenid = [];
+
+async function getAllGästelisten () {
+  let client = null;
+  try {
+    client = new MongoClient('mongodb://localhost:27017');
+    await client.connect();
+  } catch (error) {
+    console.error(error);
+    process.exit(-1);
+  }
+
+  const dbo = client.db('DatenBank');
+  gaestelisten = await dbo.collection('GästeListen').find().toArray();
+  gaestelisten.forEach(Element => {
+    Object.entries(Element).forEach(([keys, values]) => {
+      if (keys === '_id') {
+        const id = JSON.stringify(values);
+        gaestelistenid.push(id.substring(1, id.length - 1));
+      }
+    });
+  });
+
+  return {
+    GästeListen: veranstaltungen,
+    GasteListen_id: gaestelistenid
+  }
+  ;
+}
+let sitzplaene = [];
+const sitzplaeneid = [];
+async function getAllSitzpläne () {
+  let client = null;
+  try {
+    client = new MongoClient('mongodb://localhost:27017');
+    await client.connect();
+  } catch (error) {
+    console.error(error);
+    process.exit(-1);
+  }
+
+  const dbo = client.db('DatenBank');
+  sitzplaene = await dbo.collection('Sitzpläne').find().toArray();
+  sitzplaene.forEach(Element => {
+    Object.entries(Element).forEach(([keys, values]) => {
+      if (keys === '_id') {
+        const id = JSON.stringify(values);
+        sitzplaeneid.push(id.substring(1, id.length - 1));
+      }
+    });
+  });
+
+  return {
+    Sitzpläne: sitzplaene,
+    Sitzpläne_id: sitzplaeneid
+  }
+  ;
+}
+(async function () { await getAllGästelisten(); })();
+(async function () { await getAllVeranstaltunegn(); })();
+(async function () { await getAllSitzpläne(); })();
 router.get('/veranstaltungen', (request, response) => {
   (async function () {
     await getAllVeranstaltunegn();
@@ -255,6 +316,67 @@ function createVerListeBody () {
     }
   };
 }
+router.get('/gaestelisten', (request, response) => {
+  (async function () {
+    await getAllGästelisten();
+  })();
+  if (gaestelisten) {
+    response.json(createglListBody());
+  }
+});
+function createglListBody () {
+  (async function () {
+    await getAllGästelisten();
+  })();
+  return {
+    gaestelisten: gaestelisten.map(obj => {
+      return {
+        veranstaltungsname: obj.veranstaltungsname,
+        href: `${BASE_URI}/gaestelisten/${obj._id}`
+      };
+    }),
+    _links: {
+      self: {
+        href: `${BASE_URI}/gaestelisten`
+      },
+      create: {
+        method: 'POST',
+        href: `${BASE_URI}/gaestelisten`
+      }
+    }
+  };
+}
+
+router.get('/sitzplaene', (request, response) => {
+  (async function () {
+    await getAllSitzpläne();
+  })();
+  if (sitzplaene) {
+    response.json(createSPListBody());
+  }
+});
+function createSPListBody () {
+  (async function () {
+    await getAllSitzpläne();
+  })();
+  return {
+    Sitzpläne: sitzplaene.map(obj => {
+      return {
+        veranstaltungsname: obj.veranstaltungsname,
+        href: `${BASE_URI}/sitzplaene/${obj._id}`
+      };
+    }),
+    _links: {
+      self: {
+        href: `${BASE_URI}/sitzplaene`
+      },
+      create: {
+        method: 'POST',
+        href: `${BASE_URI}/sitzplaene`
+      }
+    }
+  };
+}
 
 router.get('/veranstaltungen/:id', (request, response) => {
   const id = request.params.id;
@@ -265,7 +387,6 @@ router.get('/veranstaltungen/:id', (request, response) => {
     response.json(createVerBody(id));
   }
 });
-
 function createVerBody (id) {
   (async function () {
     await getAllVeranstaltunegn();
@@ -298,6 +419,88 @@ function createVerBody (id) {
     }
   };
 }
+router.get('/gaestelisten/:id', (request, response) => {
+  const id = request.params.id;
+
+  if (!gaestelistenid.includes(id)) {
+    response.sendStatus(404);
+  } else {
+    response.json(createglBody(id));
+  }
+});
+function createglBody (id) {
+  (async function () {
+    await getAllVeranstaltunegn();
+  })();
+  let gl = null;
+  for (let i = 0; i < gaestelisten.length; i++) {
+    const element = gaestelisten[i];
+    const elemid = JSON.stringify(element._id).substring(1, JSON.stringify(element._id).length - 1);
+    if (elemid === id) {
+      gl = element;
+    }
+  }
+  return {
+    gaestelisten: gl,
+    _links: {
+      self: {
+        href: `${BASE_URI}/gaestelisten/${id}`
+      },
+      update: {
+        method: 'PUT',
+        href: `${BASE_URI}/gaestelisten/${id}`
+      },
+      delete: {
+        method: 'DELETE',
+        href: `${BASE_URI}/gaestelisten/${id}`
+      },
+      list: {
+        href: `${BASE_URI}/gaestelisten`
+      }
+    }
+  };
+}
+router.get('/sitzplaene/:id', (request, response) => {
+  const id = request.params.id;
+
+  if (!sitzplaeneid.includes(id)) {
+    response.sendStatus(404);
+  } else {
+    response.json(createSPBody(id));
+  }
+});
+function createSPBody (id) {
+  (async function () {
+    await getAllSitzpläne();
+  })();
+  let sp = null;
+  for (let i = 0; i < sitzplaene.length; i++) {
+    const element = sitzplaene[i];
+    const elemid = JSON.stringify(element._id).substring(1, JSON.stringify(element._id).length - 1);
+    if (elemid === id) {
+      sp = element;
+    }
+  }
+  return {
+    Sitzpläne: sp,
+    _links: {
+      self: {
+        href: `${BASE_URI}/sitzplaene/${id}`
+      },
+      update: {
+        method: 'PUT',
+        href: `${BASE_URI}/sitzplaene/${id}`
+      },
+      delete: {
+        method: 'DELETE',
+        href: `${BASE_URI}/sitzplaene/${id}`
+      },
+      list: {
+        href: `${BASE_URI}/sitzplaene`
+      }
+    }
+  };
+}
 
 server.delete('/veranstaltungen/:id', (request, response) => {
   const id = request.params.id;
@@ -312,7 +515,6 @@ server.delete('/veranstaltungen/:id', (request, response) => {
       if (elemid === id) {
         vername = element.name;
         veranstaltungen.splice(i, 1);
-        console.log(vername);
       }
     }
     (async function () {
@@ -321,6 +523,8 @@ server.delete('/veranstaltungen/:id', (request, response) => {
         await mongo.connect();
         const dbo = mongo.db('DatenBank');
         await dbo.collection('veranstaltungen').deleteOne({ name: vername });
+        await dbo.collection('GästeListen').deleteOne({ veranstaltungsname: vername });
+        await dbo.collection('Sitzpläne').deleteOne({ veranstaltungsname: vername });
       } catch (error) {
         console.error(error);
         response.status(500).json({ error: 'An error occured while creating the event' });
@@ -329,6 +533,107 @@ server.delete('/veranstaltungen/:id', (request, response) => {
       }
     })();
     response.json(createVerListeBody());
+  }
+});
+
+server.delete('/gaestelisten/:id', (request, response) => {
+  const id = request.params.id;
+  if (!gaestelistenid.includes(id)) {
+    response.sendStatus(404);
+  } else {
+    let vername = '';
+    gaestelistenid.filter(function (e) { return !(e === id); });
+    for (let i = 0; i < gaestelisten.length; i++) {
+      const element = gaestelisten[i];
+      const elemid = JSON.stringify(element._id).substring(1, JSON.stringify(element._id).length - 1);
+      if (elemid === id) {
+        vername = element.veranstaltungsname;
+        gaestelisten.splice(i, 1);
+      }
+    }
+    (async function () {
+      const mongo = new MongoClient('mongodb://localhost:27017');
+      try {
+        await mongo.connect();
+        const dbo = mongo.db('DatenBank');
+        let newvalues = null;
+        await veranstaltungen.forEach(elem => {
+          if (elem.name === vername) {
+            newvalues = elem.Sitzplan;
+            newvalues.gästezuordnung = null;
+          }
+        });
+        // await dbo.collection('veranstaltungen').updateOne({ name: vername }, { $set: {  } }, function (err, res) {
+        //  if (err) throw err;
+        // });
+        await dbo.collection('veranstaltungen').updateOne({ name: vername }, { $set: { gaestelist: null, Sitzplan: newvalues } }, function (err, res) {
+          if (err) throw err;
+        });
+        await dbo.collection('GästeListen').deleteOne({ veranstaltungsname: vername });
+
+        await dbo.collection('Sitzpläne').updateOne({ veranstaltungsname: vername }, { $set: { Sitzplan: newvalues } }, function (err, res) {
+          if (err) throw err;
+        });
+        (async function () { await getAllGästelisten(); })();
+        (async function () { await getAllVeranstaltunegn(); })();
+      } catch (error) {
+        console.error(error);
+        response.status(500).json({ error: 'An error occured while creating the event' });
+      } finally {
+        mongo.close();
+      }
+    })();
+    response.json(createglListBody());
+  }
+});
+
+server.delete('/sitzplaene/:id', (request, response) => {
+  const id = request.params.id;
+  console.log(sitzplaeneid);
+  if (!sitzplaeneid.includes(id)) {
+    response.sendStatus(404);
+  } else {
+    let vername = '';
+    sitzplaeneid.filter(function (e) { return !(e === id); });
+    for (let i = 0; i < sitzplaene.length; i++) {
+      const element = sitzplaene[i];
+      const elemid = JSON.stringify(element._id).substring(1, JSON.stringify(element._id).length - 1);
+      if (elemid === id) {
+        vername = element.veranstaltungsname;
+        sitzplaene.splice(i, 1);
+      }
+    }
+    (async function () {
+      const mongo = new MongoClient('mongodb://localhost:27017');
+      try {
+        await mongo.connect();
+        const dbo = mongo.db('DatenBank');
+        let newvalues = null;
+        await veranstaltungen.forEach(elem => {
+          if (elem.name === vername) {
+            newvalues = elem.Sitzplan;
+            newvalues.gästezuordnung = null;
+          }
+        });
+        // await dbo.collection('veranstaltungen').updateOne({ name: vername }, { $set: {  } }, function (err, res) {
+        //  if (err) throw err;
+        // });
+        await dbo.collection('veranstaltungen').updateOne({ name: vername }, { $set: { Sitzplan: newvalues } }, function (err, res) {
+          if (err) throw err;
+        });
+        await dbo.collection('Sitzpläne').updateOne({ veranstaltungsname: vername }, { $set: { Sitzplan: newvalues } }, function (err, res) {
+          if (err) throw err;
+        });
+        (async function () { await getAllSitzpläne(); })();
+        (async function () { await getAllVeranstaltunegn(); })();
+      } catch (error) {
+        console.error(error);
+        response.status(500).json({ error: 'An error occured while creating the event' });
+      } finally {
+        mongo.close();
+      }
+    })();
+    response.json(createSPListBody());
   }
 });
 

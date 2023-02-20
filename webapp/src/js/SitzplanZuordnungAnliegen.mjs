@@ -54,6 +54,19 @@ function GaestePlatzZuordnen () {
             bestuhlung = ver.Sitzplan.Bestuhlung;
             platzlist = new Array(rTische * sitzeProTisch);
             plgastordnerlist = new Array(rTische * sitzeProTisch);
+            const bishierigeZuord = ver.Sitzplan.gästezuordnung;
+            if (bishierigeZuord != null) {
+              for (let n = 0; n < bishierigeZuord.length; n++) {
+                const plObj = bishierigeZuord[n];
+                if (plObj === null) { continue; }
+                for (let x = 0; x < gl.length; x++) {
+                  const element = gl[x];
+                  if (element.name === plObj.name) {
+                    plgastordnerlist[n] = x + 1;
+                  }
+                }
+              }
+            }
             main.innerHTML = `<div id="gaestelistanzeiger"></div>
               <div id="sitzplananzeiger"></div>
               <div id="zuordnendiv"></div>`;
