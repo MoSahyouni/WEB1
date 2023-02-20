@@ -138,7 +138,8 @@ function EinladungStatusBearbeiten () {
     block.innerHTML = '<li><a>Gast Nr.8: name: 8, </a><a>kind: Ja, </a><a>status: unbekannt</a></li>';
 
     myDiv.appendChild(block);
-    const blockHeight = block.clientHeight + 8;
+    let blockHeight = block.clientHeight + 8;
+    blockHeight = 2144 / window.innerWidth * blockHeight;
     block.remove();
 
     myDiv.innerHTML = '';
@@ -146,6 +147,7 @@ function EinladungStatusBearbeiten () {
     msg1.innerText = 'Gäste in der Gästeliste: ';
     myDiv.appendChild(msg1);
     const wHeight = window.innerHeight - 230;
+
     const mylist = document.createElement('ul');
     mylist.setAttribute('id', 'listanzeiger');
     myDiv.appendChild(mylist);
