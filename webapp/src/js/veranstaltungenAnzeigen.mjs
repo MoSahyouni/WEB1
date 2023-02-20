@@ -68,7 +68,7 @@ function veranstaltungenPrint (veranstaltungen, myDiv) {
   if (parseInt(veranstaltungen.length / anzitemproSeite) <= 0) { anzpages = 1; } else { anzpages = parseInt(veranstaltungen.length / anzitemproSeite); }
   if (anzpages <= 0) { anzpages = veranstaltungen.length; }
   if (isNaN(anzpages)) { anzpages = veranstaltungen.length; }
-  if (anzpages * wHeight / 19 < veranstaltungen.length) { anzpages++; }
+  if (anzpages * anzitemproSeite < veranstaltungen.length) { anzpages++; }
   if (anzpages > veranstaltungen.length) { anzpages = veranstaltungen.length; }
   if (aktuellSeiteGL > anzpages) { aktuellSeiteGL = anzpages; }
   console.log(anzitemproSeite);

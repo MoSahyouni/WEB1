@@ -1,6 +1,6 @@
 function gaestelistAnliegen () {
   const Main = document.getElementById('Main');
-  Main.setAttribute('id', 'Maingasteöisterstellen');
+  Main.setAttribute('class', 'Maingastelisterstellen');
   Main.innerHTML = `
     <div id="listanzeiger1"></div>
     <div id="mainDiv">
@@ -31,7 +31,7 @@ function gaestelistAnliegen () {
 
   const listanzeiger1 = document.getElementById('listanzeiger1');
 
-  const GaesteList = [];
+  let GaesteList = [];
   function buttonundeventlistenerSpeicherBTN () {
     const gastlisbtn = document.createElement('button');
     gastlisbtn.setAttribute('id', 'gaesterstellen');
@@ -164,10 +164,16 @@ function gaestelistAnliegen () {
     });
     gastloeschenbutton.addEventListener('click', function () {
       if (gastNrinput.value === '' || isNaN(gastNrinput.value) || gastNrinput.value > GaesteList.length) { window.alert('bitte GastNr. eingeben.'); } else {
-        const gastnr = gastNrinput.value;
+        if (GaesteList.length === 1) {
+          GaesteList = [];
+          // gaestelistPrint(GaesteList, listanzeiger1);
+          listanzeiger1.innerHTML = '';
+        } else {
+          const gastnr = gastNrinput.value;
 
-        GaesteList.splice(gastnr - 1, 1);
-        gaestelistPrint(GaesteList, listanzeiger1);
+          GaesteList.splice(gastnr - 1, 1);
+          gaestelistPrint(GaesteList, listanzeiger1);
+        }
       }
     });
   }
@@ -267,7 +273,11 @@ function gaestelistAnliegen () {
     buttonundeventlistenerSpeicherBTN();
   }
   window.addEventListener('resize', function () {
-    gaestelistPrint(GaesteList, listanzeiger1);
+    if (GaesteList.length === 0) {
+      gaestelistAnliegen();
+    } else {
+      gaestelistPrint(GaesteList, listanzeiger1);
+    }
   });
 }
 
