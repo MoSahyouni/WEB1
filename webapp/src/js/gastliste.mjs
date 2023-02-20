@@ -1,5 +1,6 @@
 function gaestelistAnliegen () {
   const Main = document.getElementById('Main');
+  Main.setAttribute('id', 'Maingasteöisterstellen');
   Main.innerHTML = `
     <div id="listanzeiger1"></div>
     <div id="mainDiv">

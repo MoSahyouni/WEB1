@@ -3,6 +3,7 @@ function GaestePlatzZuordnen () {
   main.setAttribute('class', 'mainzuoednen');
   main.innerHTML = `
   <div id="mainInZuordnen">
+  <div id = "firstDivZuord">
   <ul id="list">
     <h2 id= "Text_zuordnen" >Geben Sie den Namen der zu verarbeitenden Veranstaltung ein:</h2>
     <li>name: <br><input id="vername", type="text" >
@@ -11,7 +12,7 @@ function GaestePlatzZuordnen () {
     <input type="submit", id="btnJSON", value="Veranstaltung bearbeiten" >
   </ul>
   <p id="userdata"></p>
-  </div>`;
+  </div></div>`;
   const verName = document.getElementById('vername');
   verName.setAttribute('id', 'vernameZordnen');
   const jsonButton = document.getElementById('btnJSON');
@@ -173,6 +174,7 @@ function GaestePlatzZuordnen () {
 
   function plgastordnerlistPrint (rTische, sitzeProTisch, bestuhlung, plgastordnerlist, vername) {
     const header = document.getElementById('bodyheader');
+    header.setAttribute('class', 'zuordnenHeader');
     header.innerHTML = '<h5 id="back">zurück zur Hauptseite</h5><h2></h2>' + '<h4 id="infoMsgheader">  für die Veranstaltung ' + vername + ' gibt es ' + rTische +
     ' Tische und ' + sitzeProTisch + ' Sitzplatz pro Tisch. Tische haben ' + bestuhlung + ' bestuhlung.';
     const btnBack = document.getElementById('back');

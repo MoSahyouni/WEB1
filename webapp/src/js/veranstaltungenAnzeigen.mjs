@@ -1,6 +1,8 @@
 function veranstaltungenAnzeigen () {
   const veranstaltungenContainer = document.createElement('div');
+  veranstaltungenContainer.setAttribute('id', 'alleVeranstaltungen');
   const main = document.getElementById('Main');
+  main.setAttribute('class', 'alleVerMain');
   main.innerHTML = ' ';
   if (!veranstaltungenContainer) {
     console.error('nicht gefunden');
@@ -8,7 +10,9 @@ function veranstaltungenAnzeigen () {
   (async function () {
     let vers = null;
     const listanzeigerDiv = document.createElement('div');
+    listanzeigerDiv.setAttribute('id', 'listanzeigerDiv');
     const loschenDiv = document.createElement('div');
+    loschenDiv.setAttribute('id', 'loschenDiv');
 
     try {
       const response = await window.fetch('/getveranstaltung');
@@ -58,6 +62,7 @@ function veranstaltungenPrint (veranstaltungen, myDiv) {
   rarrow.innerText = '\u2192';
 
   let anzitemproSeite = parseInt(wHeight / 25);
+  if (window.innerWidth <= 750) { anzitemproSeite = parseInt(anzitemproSeite / 2); }
   if (anzitemproSeite <= 0) { anzitemproSeite = 1; }
   let anzpages = 0;
   if (parseInt(veranstaltungen.length / anzitemproSeite) <= 0) { anzpages = 1; } else { anzpages = parseInt(veranstaltungen.length / anzitemproSeite); }
