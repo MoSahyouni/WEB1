@@ -8,7 +8,7 @@ function gaestelistAnliegen () {
     <ul>
     <li>Veranstaltungsname: <br><input id="vaeranstaltungsname", type="text" ></li>
     <li>Name des Gasts: <br><input id="gastname", type="text"  ></li>
-    <li>Name des Kinds: <br><select name="gastkind" id="gastkind"  multiple>
+    <li>Kind: <br><select name="gastkind" id="gastkind"  multiple>
                     <option>Ja</option>
                     <option>Nein</option>
                   </select>

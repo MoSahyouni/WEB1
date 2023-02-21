@@ -25,7 +25,7 @@ function EinladungStatusBearbeiten () {
       const response = await
       window.fetch('/getveranstaltung');
       const result = await response.json();
-      const vers = result;
+      const vers = await result;
       let veri = null;
       let existiert = false;
       for (let i = 0; i < vers.length; i++) {
@@ -33,7 +33,8 @@ function EinladungStatusBearbeiten () {
           existiert = true;
           veri = vers[i];
           versitzplan = veri.Sitzplan;
-          if (veri.gaestelist == null) { window.alert('Es existiert keine Gästeliste für diese Veranstaltung'); }
+          GaesteList = veri.gaestelist;
+          // if (veri.gaestelist == null) { window.alert('Es existiert keine Gästeliste für diese Veranstaltung'); }
           verId = JSON.stringify(veri._id).substring(1, JSON.stringify(veri._id).length - 1);
         }
       }
@@ -58,12 +59,16 @@ function EinladungStatusBearbeiten () {
       })());
       if (!existiert) {
         window.alert('Es existiert keine Veranstaltung mit dem Namen ' + vaeranstaltungsname.value);
+        EinladungStatusBearbeiten();
       } else {
-        Main.innerHTML = '<div id="gaestelistanzeiger"></div>';
-        listSpace = document.getElementById('gaestelistanzeiger');
-        GaesteList = veri.gaestelist;
-        gaestelistPrint(GaesteList, listSpace);
-        gastbearbeiten();
+        if (GaesteList === null || GaesteList === undefined) { window.alert('Diese veranstaltung hat Keine Gästelist'); } else {
+          Main.innerHTML = '<div id="gaestelistanzeiger"></div>';
+          listSpace = document.getElementById('gaestelistanzeiger');
+          GaesteList = veri.gaestelist;
+
+          gaestelistPrint(GaesteList, listSpace);
+          gastbearbeiten();
+        }
       }
     })();
   });
