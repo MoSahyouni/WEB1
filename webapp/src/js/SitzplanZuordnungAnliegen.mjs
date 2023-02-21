@@ -1,4 +1,6 @@
 function GaestePlatzZuordnen () {
+  let ver = null;
+  let spId = null;
   const main = document.getElementById('Main');
   main.setAttribute('class', 'mainzuoednen');
   main.innerHTML = `
@@ -34,7 +36,6 @@ function GaestePlatzZuordnen () {
           const response = await window.fetch('/getveranstaltung');
           const result = await response.json();
           vers = result;
-          let ver = null;
           let platzlist = null;
           for (let i = 0; i < vers.length; i++) {
             if (verName.value === vers[i].name) {
@@ -46,6 +47,25 @@ function GaestePlatzZuordnen () {
           if (!VerExistieret) {
             window.alert('Es existiert keine Veranstaltung mit dem gegebenen Namen');
           } else {
+            const SpsReq = await window.fetch('/sitzplaene');
+            const sps = await SpsReq.json();
+            console.log(sps);
+            /* Array.from(gls).map(element => async function (element) {
+        if (element.vaeranstaltungsname === veri.name) {
+          const e = await window.fetch(element.href);
+          GLId = JSON.stringify(e._id).substring(1, JSON.stringify(e._id).length - 1);
+        }
+      }); */
+            const spList = sps.Sitzpläne;
+            console.log(spList);
+            spList.map(element => (async function () {
+              if (element.veranstaltungsname === ver.name) {
+                const ef = await window.fetch(element.href);
+                const e = await ef.json();
+                console.log('ee ', e);
+                spId = JSON.stringify(e.Sitzplan._id).substring(1, JSON.stringify(e.Sitzplan._id).length - 1);
+              }
+            })());
             const gl = ver.gaestelist;
             // veranstaltung = Name in Database
             const veranstalungName = ver.name;
@@ -91,75 +111,80 @@ function GaestePlatzZuordnen () {
   });
   let aktuellSeiteGL = 1;
   function gaestelistPrint (gl, myDiv) {
-    const block = document.createElement('li');
-    block.innerHTML = '<li><a>Gast Nr.8: name: 8, </a><a>kind: Ja, </a><a>status: unbekannt</a></li>';
-    myDiv.appendChild(block); let blockHeight = block.clientHeight + 12;
-    block.remove();
-    myDiv.innerHTML = '';
-    // const wHeight = window.innerHeight - 230;
-    let wHeight = window.innerHeight - 260;
-    if (wHeight > 500) {
-      wHeight = 500;
-    }
-    blockHeight = 2144 / window.innerWidth * blockHeight;
-    const mylist = document.createElement('ul');
-    mylist.setAttribute('id', 'listanzeiger');
-    const glMsg = document.createElement('a');
-    glMsg.innerText = 'GästeList';
-    mylist.appendChild(glMsg);
-    myDiv.appendChild(mylist);
-    // creating pagination arrows
-    const larrow = document.createElement('span');
-    larrow.innerText = '\u2190';
-    larrow.setAttribute('id', 'paginationarrow');
-    const rarrow = document.createElement('span');
-    rarrow.setAttribute('id', 'paginationarrow');
-    rarrow.innerText = '\u2192';
-    // finding the number of pagenation pages
-    let anzitemproSeite = parseInt(wHeight / parseInt(blockHeight));
-    if (anzitemproSeite <= 0) { anzitemproSeite = 1; }
-    let anzpages = 0;
-    if (parseInt(gl.length / anzitemproSeite) <= 0) { anzpages = 1; } else { anzpages = parseInt(gl.length / anzitemproSeite); }
-    if (anzpages <= 0) { anzpages = gl.length; }
-    if (isNaN(anzpages)) { anzpages = gl.length; }
-    if (anzpages * anzitemproSeite < gl.length) { anzpages++; }
-    if (anzpages > gl.length) { anzpages = gl.length; }
-    if (aktuellSeiteGL > anzpages) { aktuellSeiteGL = anzpages; }
-    if (aktuellSeiteGL !== 1) { printgl(aktuellSeiteGL, gl, mylist, anzitemproSeite); } else {
-      aktuellSeiteGL = 1;
-      printgl(aktuellSeiteGL, gl, mylist, anzitemproSeite);
-    }
-    rarrow.addEventListener('click', function () {
-      if (!(aktuellSeiteGL === anzpages)) {
-        aktuellSeiteGL++;
-        mylist.innerHTML = '';
-        const glMsg = document.createElement('a');
-        glMsg.innerText = 'GästeList';
-        paginationPage.innerText = aktuellSeiteGL + '/ ' + anzpages;
-        mylist.appendChild(glMsg);
+    if (gl === null || gl === undefined) {
+      window.alert('Diese veranstaltung hat Keine Gästelist');
+      GaestePlatzZuordnen();
+    } else {
+      const block = document.createElement('li');
+      block.innerHTML = '<li><a>Gast Nr.8: name: 8, </a><a>kind: Ja, </a><a>status: unbekannt</a></li>';
+      myDiv.appendChild(block); let blockHeight = block.clientHeight + 12;
+      block.remove();
+      myDiv.innerHTML = '';
+      // const wHeight = window.innerHeight - 230;
+      let wHeight = window.innerHeight - 260;
+      if (wHeight > 500) {
+        wHeight = 500;
+      }
+      blockHeight = 2144 / window.innerWidth * blockHeight;
+      const mylist = document.createElement('ul');
+      mylist.setAttribute('id', 'listanzeiger');
+      const glMsg = document.createElement('a');
+      glMsg.innerText = 'GästeList';
+      mylist.appendChild(glMsg);
+      myDiv.appendChild(mylist);
+      // creating pagination arrows
+      const larrow = document.createElement('span');
+      larrow.innerText = '\u2190';
+      larrow.setAttribute('id', 'paginationarrow');
+      const rarrow = document.createElement('span');
+      rarrow.setAttribute('id', 'paginationarrow');
+      rarrow.innerText = '\u2192';
+      // finding the number of pagenation pages
+      let anzitemproSeite = parseInt(wHeight / parseInt(blockHeight));
+      if (anzitemproSeite <= 0) { anzitemproSeite = 1; }
+      let anzpages = 0;
+      if (parseInt(gl.length / anzitemproSeite) <= 0) { anzpages = 1; } else { anzpages = parseInt(gl.length / anzitemproSeite); }
+      if (anzpages <= 0) { anzpages = gl.length; }
+      if (isNaN(anzpages)) { anzpages = gl.length; }
+      if (anzpages * anzitemproSeite < gl.length) { anzpages++; }
+      if (anzpages > gl.length) { anzpages = gl.length; }
+      if (aktuellSeiteGL > anzpages) { aktuellSeiteGL = anzpages; }
+      if (aktuellSeiteGL !== 1) { printgl(aktuellSeiteGL, gl, mylist, anzitemproSeite); } else {
+        aktuellSeiteGL = 1;
         printgl(aktuellSeiteGL, gl, mylist, anzitemproSeite);
       }
-    });
-    larrow.addEventListener('click', function () {
-      if (aktuellSeiteGL !== 1) {
-        aktuellSeiteGL--;
-        mylist.innerHTML = '';
-        const glMsg = document.createElement('a');
-        glMsg.innerText = 'GästeList';
-        paginationPage.innerText = aktuellSeiteGL + '/ ' + anzpages;
-        mylist.appendChild(glMsg);
-        printgl(aktuellSeiteGL, gl, mylist, anzitemproSeite);
-      }
-    });
-    const paginationPage = document.createElement('a');
-    paginationPage.innerText = aktuellSeiteGL + '/ ' + anzpages;
-    paginationPage.setAttribute('id', 'paginationPage');
-    const paginationInfoDiv = document.createElement('div');
-    paginationInfoDiv.setAttribute('id', 'paginationDiv');
-    paginationInfoDiv.appendChild(larrow);
-    paginationInfoDiv.appendChild(paginationPage);
-    paginationInfoDiv.appendChild(rarrow);
-    myDiv.appendChild(paginationInfoDiv);
+      rarrow.addEventListener('click', function () {
+        if (!(aktuellSeiteGL === anzpages)) {
+          aktuellSeiteGL++;
+          mylist.innerHTML = '';
+          const glMsg = document.createElement('a');
+          glMsg.innerText = 'GästeList';
+          paginationPage.innerText = aktuellSeiteGL + '/ ' + anzpages;
+          mylist.appendChild(glMsg);
+          printgl(aktuellSeiteGL, gl, mylist, anzitemproSeite);
+        }
+      });
+      larrow.addEventListener('click', function () {
+        if (aktuellSeiteGL !== 1) {
+          aktuellSeiteGL--;
+          mylist.innerHTML = '';
+          const glMsg = document.createElement('a');
+          glMsg.innerText = 'GästeList';
+          paginationPage.innerText = aktuellSeiteGL + '/ ' + anzpages;
+          mylist.appendChild(glMsg);
+          printgl(aktuellSeiteGL, gl, mylist, anzitemproSeite);
+        }
+      });
+      const paginationPage = document.createElement('a');
+      paginationPage.innerText = aktuellSeiteGL + '/ ' + anzpages;
+      paginationPage.setAttribute('id', 'paginationPage');
+      const paginationInfoDiv = document.createElement('div');
+      paginationInfoDiv.setAttribute('id', 'paginationDiv');
+      paginationInfoDiv.appendChild(larrow);
+      paginationInfoDiv.appendChild(paginationPage);
+      paginationInfoDiv.appendChild(rarrow);
+      myDiv.appendChild(paginationInfoDiv);
+    }
   }
 
   function printgl (pageNr, gl, mylist, anzitemproSeite) {
@@ -333,25 +358,38 @@ function GaestePlatzZuordnen () {
     });
     mylist.appendChild(SaveZuordnungBTN);
   }
-}
-async function fechtGastPlaetzeZuordnung (gastelist, plaetzeZuordnung, reTische, platzproTisch, bestuhlung, veranstalungName) {
-  const tofetchlist = [];
-  for (let i = 0; i < plaetzeZuordnung.length; i++) {
-    tofetchlist[i] = gastelist[plaetzeZuordnung[i] - 1];
-  }
-  const sitzplan = { recheckigenTische: reTische, sitzeprotisch: platzproTisch, Bestuhlung: bestuhlung, gästezuordnung: tofetchlist };
 
-  await window.fetch('/gastplaetzezuordnunganliegen', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ veranstaltungsname: veranstalungName, Sitzplan: sitzplan })
-  }).then(response => {
-    if (response) { return response.json(); }
-  }).catch(error => {
-    console.log(error);
-  });
+  async function fechtGastPlaetzeZuordnung (gastelist, plaetzeZuordnung, reTische, platzproTisch, bestuhlung, veranstalungName) {
+    const tofetchlist = [];
+    for (let i = 0; i < plaetzeZuordnung.length; i++) {
+      tofetchlist[i] = gastelist[plaetzeZuordnung[i] - 1];
+    }
+    const sitzplan = { recheckigenTische: reTische, sitzeprotisch: platzproTisch, Bestuhlung: bestuhlung, gästezuordnung: tofetchlist };
+
+    /* await window.fetch('/gastplaetzezuordnunganliegen', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ veranstaltungsname: veranstalungName, Sitzplan: sitzplan })
+    }).then(response => {
+      if (response) { return response.json(); }
+    }).catch(error => {
+      console.log(error);
+    }); */
+
+    await window.fetch(`/sitzplaene/${spId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ veranstaltungsname: veranstalungName, Sitzplan: sitzplan })
+    }).then(response => {
+      if (response) { return response.json(); }
+    }).catch(error => {
+      console.log(error);
+    });
+  }
 }
 
 export default GaestePlatzZuordnen;

@@ -57,7 +57,7 @@ function VerAnlegen () {
           }
           if (!altename) {
             (async function () {
-              await window.fetch('/veranstaltungerzeugen', {
+              await window.fetch('/veranstaltungen', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'

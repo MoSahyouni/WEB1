@@ -59,7 +59,7 @@ function gaestelistAnliegen () {
         } else {
           if (veri.gaestelist != null) { window.alert('Es existiert eine Gästeliste für diese Veranstaltung'); } else {
             (async function () {
-              window.fetch('/gasterzeugen', {
+              window.fetch('/gaestelisten', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'

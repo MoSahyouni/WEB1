@@ -33,7 +33,7 @@ function veranstaltungenAnzeigen () {
     });
   })();
 }
-
+let verId = null;
 let aktuellSeiteGL = 1;
 function veranstaltungenPrint (veranstaltungen, myDiv) {
   const block = document.createElement('li');
@@ -119,7 +119,7 @@ function printgl (pageNr, vl, mylist, anzitemproSeite) {
     const vname = v.name;
 
     const objname = document.createElement('a');
-    objname.innerText = 'Veranstaltung: ' + vname + '.';
+    objname.innerText = 'Veranstaltung: ' + vname + ' ';
     obj.appendChild(objname);
 
     mylist.appendChild(obj);
@@ -142,8 +142,15 @@ function veranstaltunglöschenUndLoschenBtn (verlist, htmlspace) {
   htmlspace.appendChild(loschenBtn);
   loschenBtn.addEventListener('click', function () {
     const vername = verName.value;
-    (async function () {
-      await window.fetch('/veranstaltungloschen', {
+    for (let i = 0; i < verlist.length; i++) {
+      const elem = verlist[i];
+      if (elem.name === vername) {
+        verId = JSON.stringify(elem._id).substring(1, JSON.stringify(elem._id).length - 1);
+      }
+    }
+    if (verId === null) { window.alert('Name nicht richtig'); } else {
+      (async function () {
+      /* await window.fetch('/veranstaltungloschen', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -153,9 +160,21 @@ function veranstaltunglöschenUndLoschenBtn (verlist, htmlspace) {
         if (response) { return response.json(); }
       }).catch(error => {
         console.log(error);
-      });
-    })();
-    veranstaltungenAnzeigen();
+      }); */
+        await window.fetch(`/veranstaltungen/${verId}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ name: vername })
+        }).then(response => {
+          if (response) { return response.json(); }
+        }).catch(error => {
+          console.log(error);
+        });
+      })();
+      veranstaltungenAnzeigen();
+    }
   });
 }
 

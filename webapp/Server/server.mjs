@@ -24,32 +24,6 @@ server.get('/json', (request, response) => {
   });
 });
 
-server.post('/veranstaltungerzeugen', async (req, res) => {
-  const client = new MongoClient('mongodb://localhost:27017');
-  try {
-    await client.connect();
-    const db = client.db('DatenBank');
-    const veranstaltungen = db.collection('veranstaltungen');
-    const Splan = db.collection('Sitzpläne');
-    await Splan.insertOne({
-      veranstaltungsname: req.body.name,
-      Sitzplan: req.body.sitzplan
-    });
-    const result = await veranstaltungen.insertOne({
-      name: req.body.name,
-      datum: req.body.datum,
-      Sitzplan: req.body.sitzplan
-    });
-
-    res.json(result);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error while creating the event' });
-  } finally {
-    client.close();
-  }
-});
-
 server.get('/getveranstaltung', (req, res) => {
   (async function () {
     const client2 = new MongoClient('mongodb://localhost:27017');
@@ -70,7 +44,7 @@ server.get('/getveranstaltung', (req, res) => {
   })();
 });
 
-server.post('/veranstaltungloschen', (req, res) => {
+/* server.post('/veranstaltungloschen', (req, res) => {
   (async function () {
     const client5 = new MongoClient('mongodb://localhost:27017');
     try {
@@ -88,39 +62,9 @@ server.post('/veranstaltungloschen', (req, res) => {
       client5.close();
     }
   })();
-});
+}); */
 
-server.post('/gasterzeugen', async (req, res) => {
-  const client = new MongoClient('mongodb://localhost:27017');
-  try {
-    await client.connect();
-    const db = client.db('DatenBank');
-    const gäste = db.collection('GästeListen');
-
-    const Ver = { name: req.body.vname };
-    const newvalues = { $set: { gaestelist: req.body.Gästelist } };
-    db.collection('veranstaltungen').updateOne(Ver, newvalues, function (err, res) {
-      if (err) throw err;
-      console.log('veranstaltung updated');
-    });
-    const result = await gäste.insertOne({
-      veranstaltungsname: req.body.vname,
-      gaestelist: req.body.Gästelist
-
-    });
-
-    res.json(result);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'An error occured while creating the event' });
-  } finally {
-    client.close();
-  }
-});
-
-server.post('/gastplaetzezuordnunganliegen', async (req, res) => {
-  console.log(req.body.veranstaltungsname);
-
+/* server.post('/gastplaetzezuordnunganliegen', async (req, res) => {
   const client3 = new MongoClient('mongodb://localhost:27017');
   try {
     await client3.connect();
@@ -145,8 +89,8 @@ server.post('/gastplaetzezuordnunganliegen', async (req, res) => {
   } finally {
     client3.close();
   }
-});
-server.post('/gastelisteAktualisieren', async (req, res) => {
+}); */
+/* server.post('/gastelisteAktualisieren', async (req, res) => {
   console.log(req.body.vname);
 
   const client4 = new MongoClient('mongodb://localhost:27017');
@@ -178,7 +122,7 @@ server.post('/gastelisteAktualisieren', async (req, res) => {
   } finally {
     client4.close();
   }
-});
+}); */
 const router = express.Router();
 server.use(router);
 router.get('/REST', (req, res) => {
@@ -195,6 +139,60 @@ router.get('/REST', (req, res) => {
 
 let veranstaltungen = null;
 const versId = [];
+
+router.post('/veranstaltungen', async (req, res) => {
+  const client = new MongoClient('mongodb://localhost:27017');
+  try {
+    await client.connect();
+    const db = client.db('DatenBank');
+    const veranstaltungen = db.collection('veranstaltungen');
+    const Splan = db.collection('Sitzpläne');
+    await Splan.insertOne({
+      veranstaltungsname: req.body.name,
+      Sitzplan: req.body.sitzplan
+    });
+    const result = await veranstaltungen.insertOne({
+      name: req.body.name,
+      datum: req.body.datum,
+      Sitzplan: req.body.sitzplan
+    });
+
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error while creating the event' });
+  } finally {
+    client.close();
+  }
+});
+
+router.post('/gaestelisten', async (req, res) => {
+  const client = new MongoClient('mongodb://localhost:27017');
+  try {
+    await client.connect();
+    const db = client.db('DatenBank');
+    const gäste = db.collection('GästeListen');
+
+    const Ver = { name: req.body.vname };
+    const newvalues = { $set: { gaestelist: req.body.Gästelist } };
+    db.collection('veranstaltungen').updateOne(Ver, newvalues, function (err, res) {
+      if (err) throw err;
+      console.log('veranstaltung updated');
+    });
+    const result = await gäste.insertOne({
+      veranstaltungsname: req.body.vname,
+      gaestelist: req.body.Gästelist
+
+    });
+
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occured while creating the event' });
+  } finally {
+    client.close();
+  }
+});
 
 async function getAllVeranstaltunegn () {
   let client = null;
@@ -289,15 +287,15 @@ async function getAllSitzpläne () {
 router.get('/veranstaltungen', (request, response) => {
   (async function () {
     await getAllVeranstaltunegn();
+
+    if (veranstaltungen) {
+      response.json(createVerListeBody());
+    }
   })();
-  if (veranstaltungen) {
-    response.json(createVerListeBody());
-  }
 });
 function createVerListeBody () {
-  (async function () {
-    await getAllVeranstaltunegn();
-  })();
+  (async function () { await getAllVeranstaltunegn(); })();
+
   return {
     veranstaltungen: veranstaltungen.map(obj => {
       return {
@@ -316,13 +314,67 @@ function createVerListeBody () {
     }
   };
 }
+
+router.put('/gaestelisten/:id', (request, response) => {
+  const id = request.params.id;
+  if (!gaestelistenid.includes(id)) {
+    response.sendStatus(404);
+  } else {
+    let gl = null;
+    for (let i = 0; i < gaestelisten.length; i++) {
+      const element = gaestelisten[i];
+      const elemid = JSON.stringify(element._id).substring(1, JSON.stringify(element._id).length - 1);
+      if (elemid === id) {
+        gl = element;
+      }
+    }
+    let client = null;
+    console.log(JSON.stringify(request.body));
+    (async function () {
+      const vname = gl.veranstaltungsname;
+      try {
+        client = new MongoClient('mongodb://localhost:27017');
+        await client.connect();
+        const db = client.db('DatenBank');
+        const glcollection = db.collection('GästeListen');
+
+        const Ver = { name: vname };
+        const newvalues = { $set: { gaestelist: request.body.Gastelist, Sitzplan: request.body.sitzplan } };
+        db.collection('veranstaltungen').updateOne(Ver, newvalues, function (err, res) {
+          if (err) throw err;
+        });
+        const VerSitzplan = { veranstaltungsname: vname };
+        const newvaluesSitzplan = { $set: { Sitzplan: request.body.sitzplan } };
+        db.collection('Sitzpläne').updateOne(VerSitzplan, newvaluesSitzplan, function (err, res) {
+          if (err) throw err;
+        });
+        const ver2 = { veranstaltungsname: vname };
+        const newvalues2 = { $set: { gaestelist: request.body.Gastelist } };
+        await glcollection.updateOne(ver2, newvalues2, function (err, res) {
+          if (err) throw err;
+        });
+        getAllGästelisten();
+        getAllSitzpläne();
+        getAllVeranstaltunegn();
+      } catch (error) {
+        console.error(error);
+        process.exit(-1);
+      } finally {
+        client.close();
+      }
+    })();
+    response.json(createglBody(id));
+  }
+});
+
 router.get('/gaestelisten', (request, response) => {
   (async function () {
     await getAllGästelisten();
+
+    if (gaestelisten) {
+      response.json(createglListBody());
+    }
   })();
-  if (gaestelisten) {
-    response.json(createglListBody());
-  }
 });
 function createglListBody () {
   (async function () {
@@ -482,7 +534,7 @@ function createSPBody (id) {
     }
   }
   return {
-    Sitzpläne: sp,
+    Sitzplan: sp,
     _links: {
       self: {
         href: `${BASE_URI}/sitzplaene/${id}`
@@ -634,6 +686,52 @@ server.delete('/sitzplaene/:id', (request, response) => {
       }
     })();
     response.json(createSPListBody());
+  }
+});
+
+router.put('/sitzplaene/:id', (req, res) => {
+  const id = req.params.id;
+  if (!sitzplaeneid.includes(id)) {
+    res.sendStatus(404);
+  } else {
+    let sp = null;
+    for (let i = 0; i < sitzplaene.length; i++) {
+      const element = sitzplaene[i];
+      const elemid = JSON.stringify(element._id).substring(1, JSON.stringify(element._id).length - 1);
+      if (elemid === id) {
+        sp = element;
+      }
+    }
+    let client = null;
+    console.log(JSON.stringify(req.body));
+    (async function () {
+      const vname = sp.veranstaltungsname;
+      client = new MongoClient('mongodb://localhost:27017');
+      try {
+        await client.connect();
+        const db = client.db('DatenBank');
+        const spl = db.collection('Sitzpläne');
+
+        const Ver = { name: vname };
+        const newvalues = { $set: { Sitzplan: req.body.Sitzplan } };
+        db.collection('veranstaltungen').updateOne(Ver, newvalues, function (err, res) {
+          if (err) throw err;
+        });
+        const ver2 = { _id: sp._id };
+        const newvalues2 = { $set: { Sitzplan: req.body.Sitzplan } };
+        await spl.updateOne(ver2, newvalues2, function (err, res) {
+          if (err) throw err;
+        });
+
+        // res.json(result);
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'An error occured while creating the event' });
+      } finally {
+        client.close();
+      }
+    })();
+    res.json(createSPBody(id));
   }
 });
 
