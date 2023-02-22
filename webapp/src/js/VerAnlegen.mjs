@@ -30,7 +30,6 @@ function VerAnlegen () {
   const plaetzeproTisch = document.getElementById('plaetzeProTisch');
   const bestuhlung = document.getElementById('bestuhlung');
   const jsonButton = document.getElementById('btnJSON');
-  // Sitz Plan kann leer gelasen !!!!!!!!
   jsonButton.addEventListener('click', function () {
     let requiredFields = true;
     if (verNameInput.value === '') { requiredFields = false; }
@@ -74,7 +73,7 @@ function VerAnlegen () {
             window.alert('Veranstaltung erstellt');
           }
         } catch (error) {
-          console.log('Er....');
+          console.log('Erorr');
           console.error(error.message);
         }
       })();

@@ -34,19 +34,12 @@ function EinladungStatusBearbeiten () {
           veri = vers[i];
           versitzplan = veri.Sitzplan;
           GaesteList = veri.gaestelist;
-          // if (veri.gaestelist == null) { window.alert('Es existiert keine Gästeliste für diese Veranstaltung'); }
           verId = JSON.stringify(veri._id).substring(1, JSON.stringify(veri._id).length - 1);
         }
       }
       const glsReq = await window.fetch('/gaestelisten');
       const gls = await glsReq.json();
       console.log(gls);
-      /* Array.from(gls).map(element => async function (element) {
-        if (element.vaeranstaltungsname === veri.name) {
-          const e = await window.fetch(element.href);
-          GLId = JSON.stringify(e._id).substring(1, JSON.stringify(e._id).length - 1);
-        }
-      }); */
       const glList = gls.gaestelisten;
       console.log(glList);
       glList.map(element => (async function () {
@@ -58,10 +51,10 @@ function EinladungStatusBearbeiten () {
         }
       })());
       if (!existiert) {
-        window.alert('Es existiert keine Veranstaltung mit dem Namen ' + vaeranstaltungsname.value);
+        window.alert('Es existiert keine Veranstaltung mit den Namen ' + vaeranstaltungsname.value);
         EinladungStatusBearbeiten();
       } else {
-        if (GaesteList === null || GaesteList === undefined) { window.alert('Diese veranstaltung hat Keine Gästelist'); } else {
+        if (GaesteList === null || GaesteList === undefined) { window.alert('Diese veranstaltung hat Keine Gästeliste'); } else {
           Main.innerHTML = '<div id="gaestelistanzeiger"></div>';
           listSpace = document.getElementById('gaestelistanzeiger');
           GaesteList = veri.gaestelist;
@@ -95,19 +88,6 @@ function EinladungStatusBearbeiten () {
       }
       versitzplan.gästezuordnung = sitzplanZuordnung;
       console.log(verId);
-      /* (async function () {
-        window.fetch('/gastelisteAktualisieren', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ vname: vaeranstaltungsname.value, Gästelist: GaesteList, sitzplan: versitzplan })
-        }).then(response => {
-          if (response) { return response.json(); }
-        }).catch(error => {
-          console.log(error);
-        });
-      })(); */
       const fetchbody = JSON.stringify({ Gastelist: GaesteList, sitzplan: versitzplan });
       (async function () {
         window.fetch(`/gaestelisten/${GLId}`, {
@@ -122,22 +102,6 @@ function EinladungStatusBearbeiten () {
           console.log(error);
         });
       })();
-      /* const fetchbody = JSON.stringify({ Gastelist: GaesteList, sitzplan: versitzplan });
-      const fetchMethode = {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8'
-        },
-        body: fetchbody
-      };
-      (async function () {
-        const url = `/gaestelisten/${verId}`;
-        await window.fetch(url, fetchMethode).then(response => {
-          if (response) { return response.json(); }
-        }).catch(error => {
-          console.log(error);
-        });
-      })(); */
     });
   }
   function gastbearbeiten () {

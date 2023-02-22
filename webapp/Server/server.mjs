@@ -1,5 +1,4 @@
 import express from 'express';
-
 import { MongoClient } from 'mongodb';
 const server = express();
 
@@ -8,7 +7,7 @@ const maxPort = 65535;
 if (process.argv.length >= 3) {
   const argument = process.argv;
   if (!isNaN(argument[2]) && argument[2] < maxPort + 1) { port = argument[2]; } else {
-    console.log('invaild input, server will be listening on port 8080');
+    console.log('ungültige Eingabe, der Server lauscht auf Port 8080');
   }
 }
 const BASE_URI = `http://localhost:${port}`;
@@ -32,9 +31,7 @@ server.get('/getveranstaltung', (req, res) => {
       const dbo = client2.db('DatenBank');
       const collection = dbo.collection('veranstaltungen');
       const vers = await collection.find().toArray();
-
       const result = vers;
-
       res.json(result);
     } catch (error) {
       console.error(error);
@@ -44,85 +41,6 @@ server.get('/getveranstaltung', (req, res) => {
   })();
 });
 
-/* server.post('/veranstaltungloschen', (req, res) => {
-  (async function () {
-    const client5 = new MongoClient('mongodb://localhost:27017');
-    try {
-      await client5.connect();
-      const dbo = client5.db('DatenBank');
-      const collection = dbo.collection('veranstaltungen');
-      await collection.deleteOne({ name: req.body.name });
-      const sp = dbo.collection('Sitzpläne');
-      const gl = dbo.collection('GästeListen');
-      await sp.deleteOne({ veranstaltungsname: req.body.name });
-      await gl.deleteOne({ veranstaltungsname: req.body.name });
-    } catch (error) {
-      console.error(error);
-    } finally {
-      client5.close();
-    }
-  })();
-}); */
-
-/* server.post('/gastplaetzezuordnunganliegen', async (req, res) => {
-  const client3 = new MongoClient('mongodb://localhost:27017');
-  try {
-    await client3.connect();
-    const db = client3.db('DatenBank');
-    const spl = db.collection('Sitzpläne');
-
-    const Ver = { name: req.body.veranstaltungsname };
-    const newvalues = { $set: { Sitzplan: req.body.Sitzplan } };
-    db.collection('veranstaltungen').updateOne(Ver, newvalues, function (err, res) {
-      if (err) throw err;
-    });
-    const ver2 = { veranstaltungsname: req.body.veranstaltungsname };
-    const newvalues2 = { $set: { Sitzplan: req.body.Sitzplan } };
-    const result = await spl.updateOne(ver2, newvalues2, function (err, res) {
-      if (err) throw err;
-    });
-
-    res.json(result);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'An error occured while creating the event' });
-  } finally {
-    client3.close();
-  }
-}); */
-/* server.post('/gastelisteAktualisieren', async (req, res) => {
-  console.log(req.body.vname);
-
-  const client4 = new MongoClient('mongodb://localhost:27017');
-  try {
-    await client4.connect();
-    const db = client4.db('DatenBank');
-    const gl = db.collection('GästeListen');
-
-    const Ver = { name: req.body.vname };
-    const newvalues = { $set: { gaestelist: req.body.Gästelist, Sitzplan: req.body.sitzplan } };
-    db.collection('veranstaltungen').updateOne(Ver, newvalues, function (err, res) {
-      if (err) throw err;
-    });
-    const VerSitzplan = { veranstaltungsname: req.body.vname };
-    const newvaluesSitzplan = { $set: { Sitzplan: req.body.sitzplan } };
-    db.collection('Sitzpläne').updateOne(VerSitzplan, newvaluesSitzplan, function (err, res) {
-      if (err) throw err;
-    });
-    const ver2 = { veranstaltungsname: req.body.vname };
-    const newvalues2 = { $set: { gaestelist: req.body.Gästelist } };
-    const result = await gl.updateOne(ver2, newvalues2, function (err, res) {
-      if (err) throw err;
-    });
-
-    res.json(result);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'An error occured while creating the event' });
-  } finally {
-    client4.close();
-  }
-}); */
 const router = express.Router();
 server.use(router);
 router.get('/REST', (req, res) => {
@@ -188,7 +106,7 @@ router.post('/gaestelisten', async (req, res) => {
     res.json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'An error occured while creating the event' });
+    res.status(500).json({ error: 'Erorr' });
   } finally {
     client.close();
   }
@@ -615,9 +533,7 @@ server.delete('/gaestelisten/:id', (request, response) => {
             newvalues.gästezuordnung = null;
           }
         });
-        // await dbo.collection('veranstaltungen').updateOne({ name: vername }, { $set: {  } }, function (err, res) {
-        //  if (err) throw err;
-        // });
+
         await dbo.collection('veranstaltungen').updateOne({ name: vername }, { $set: { gaestelist: null, Sitzplan: newvalues } }, function (err, res) {
           if (err) throw err;
         });
@@ -667,9 +583,7 @@ server.delete('/sitzplaene/:id', (request, response) => {
             newvalues.gästezuordnung = null;
           }
         });
-        // await dbo.collection('veranstaltungen').updateOne({ name: vername }, { $set: {  } }, function (err, res) {
-        //  if (err) throw err;
-        // });
+
         await dbo.collection('veranstaltungen').updateOne({ name: vername }, { $set: { Sitzplan: newvalues } }, function (err, res) {
           if (err) throw err;
         });
@@ -722,8 +636,6 @@ router.put('/sitzplaene/:id', (req, res) => {
         await spl.updateOne(ver2, newvalues2, function (err, res) {
           if (err) throw err;
         });
-
-        // res.json(result);
       } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'An error occured while creating the event' });

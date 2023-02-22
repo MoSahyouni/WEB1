@@ -117,11 +117,11 @@ function printgl (pageNr, vl, mylist, anzitemproSeite) {
 
     const obj = document.createElement('li');
     const vname = v.name;
+    const vDatum = v.datum;
 
     const objname = document.createElement('a');
-    objname.innerText = 'Veranstaltung: ' + vname + ' ';
+    objname.innerText = 'Veranstaltung: ' + vname + ', Am: ' + vDatum;
     obj.appendChild(objname);
-
     mylist.appendChild(obj);
   }
 }
@@ -150,17 +150,6 @@ function veranstaltunglöschenUndLoschenBtn (verlist, htmlspace) {
     }
     if (verId === null) { window.alert('Name nicht richtig'); } else {
       (async function () {
-      /* await window.fetch('/veranstaltungloschen', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ name: vername })
-      }).then(response => {
-        if (response) { return response.json(); }
-      }).catch(error => {
-        console.log(error);
-      }); */
         await window.fetch(`/veranstaltungen/${verId}`, {
           method: 'DELETE',
           headers: {
