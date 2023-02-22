@@ -86,12 +86,12 @@ function GaestePlatzZuordnen () {
             const zuordnendiv = document.getElementById('zuordnendiv');
 
             gaestelistPrint(gl, glanzeiger);
-            plgastordnerlistPrint(rTische, sitzeProTisch, bestuhlung, plgastordnerlist, verName.value);
+            plgastordnerlistPrint(rTische, sitzeProTisch, bestuhlung, verName.value);
             zuordnenFun(platzlist, zuordnendiv, plgastordnerlist, rTische, sitzeProTisch, bestuhlung, gl, veranstalungName);
 
             window.addEventListener('resize', function () {
               gaestelistPrint(gl, glanzeiger);
-              plgastordnerlistPrint(rTische, sitzeProTisch, bestuhlung, plgastordnerlist, verName.value);
+              plgastordnerlistPrint(rTische, sitzeProTisch, bestuhlung, verName.value);
               zuordnenFun(platzlist, zuordnendiv, plgastordnerlist, rTische, sitzeProTisch, bestuhlung, gl, veranstalungName);
             });
           }
@@ -198,7 +198,7 @@ function GaestePlatzZuordnen () {
       mylist.appendChild(obj);
     }
   }
-  function plgastordnerlistPrint (rTische, sitzeProTisch, bestuhlung, plgastordnerlist, vername) {
+  function plgastordnerlistPrint (rTische, sitzeProTisch, bestuhlung, vername) {
     const header = document.getElementById('bodyheader');
     header.setAttribute('class', 'zuordnenHeader');
     header.innerHTML = '<h5 id="back">zurück zur Hauptseite</h5><h2></h2>' + '<h4 id="infoMsgheader">  Für diese Veranstaltung ' + vername + ' gibt es ' + rTische +

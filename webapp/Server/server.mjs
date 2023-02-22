@@ -13,8 +13,6 @@ if (process.argv.length >= 3) {
 const BASE_URI = `http://localhost:${port}`;
 server.use(express.json({ extended: true, limit: '1mb' }));
 server.use(express.static('dist'));
-server.get('/', (request, response) => {
-});
 
 server.get('/json', (request, response) => {
   response.json({
