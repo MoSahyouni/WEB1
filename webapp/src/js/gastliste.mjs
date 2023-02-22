@@ -55,7 +55,6 @@ function gaestelistAnliegen () {
 
         if (!erg) {
           window.alert('Es existiert keine Veranstaltung mit den gegebenen Namen');
-          console.log(vaeranstaltungsname.value);
         } else {
           if (veri.gaestelist != null) { window.alert('Es existiert eine Gästeliste für diese Veranstaltung'); } else {
             (async function () {
@@ -216,6 +215,7 @@ function gaestelistAnliegen () {
     if (anzpages * anzitemproSeite < gl.length) { anzpages++; }
     if (anzpages > gl.length) { anzpages = gl.length; }
     if (aktuellSeiteGL > anzpages) { aktuellSeiteGL = anzpages; }
+    if (anzitemproSeite > 15) { anzitemproSeite = 15; }
     if (aktuellSeiteGL !== 1) { printgl(aktuellSeiteGL, gl, mylist, anzitemproSeite); } else {
       aktuellSeiteGL = 1;
       printgl(aktuellSeiteGL, gl, mylist, anzitemproSeite);

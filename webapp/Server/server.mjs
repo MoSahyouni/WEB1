@@ -56,7 +56,7 @@ router.get('/REST', (req, res) => {
 });
 
 let veranstaltungen = null;
-const versId = [];
+let versId = [];
 
 router.post('/veranstaltungen', async (req, res) => {
   const client = new MongoClient('mongodb://localhost:27017');
@@ -95,7 +95,6 @@ router.post('/gaestelisten', async (req, res) => {
     const newvalues = { $set: { gaestelist: req.body.Gästelist } };
     db.collection('veranstaltungen').updateOne(Ver, newvalues, function (err, res) {
       if (err) throw err;
-      console.log('veranstaltung updated');
     });
     const result = await gäste.insertOne({
       veranstaltungsname: req.body.vname,
@@ -117,87 +116,94 @@ async function getAllVeranstaltunegn () {
   try {
     client = new MongoClient('mongodb://localhost:27017');
     await client.connect();
+    const dbo = client.db('DatenBank');
+    veranstaltungen = await dbo.collection('veranstaltungen').find().toArray();
+    versId = [];
+    veranstaltungen.forEach(Element => {
+      Object.entries(Element).forEach(([keys, values]) => {
+        if (keys === '_id') {
+          const id = JSON.stringify(values);
+
+          versId.push(id.substring(1, id.length - 1));
+        }
+      });
+    });
+    return {
+      veranstaltungen: veranstaltungen,
+      veranstaltungenid: versId
+    }
+    ;
   } catch (error) {
     console.error(error);
     process.exit(-1);
+  } finally {
+    client.close();
   }
-
-  const dbo = client.db('DatenBank');
-  veranstaltungen = await dbo.collection('veranstaltungen').find().toArray();
-  veranstaltungen.forEach(Element => {
-    Object.entries(Element).forEach(([keys, values]) => {
-      if (keys === '_id') {
-        const id = JSON.stringify(values);
-        versId.push(id.substring(1, id.length - 1));
-      }
-    });
-  });
-
-  return {
-    veranstaltungen: veranstaltungen,
-    veranstaltungenid: versId
-  }
-  ;
 }
 
 let gaestelisten = [];
-const gaestelistenid = [];
+let gaestelistenid = [];
 
 async function getAllGästelisten () {
   let client = null;
   try {
     client = new MongoClient('mongodb://localhost:27017');
     await client.connect();
+
+    const dbo = client.db('DatenBank');
+    gaestelisten = await dbo.collection('GästeListen').find().toArray();
+    gaestelistenid = [];
+    gaestelisten.forEach(Element => {
+      Object.entries(Element).forEach(([keys, values]) => {
+        if (keys === '_id') {
+          const id = JSON.stringify(values);
+
+          gaestelistenid.push(id.substring(1, id.length - 1));
+        }
+      });
+    });
+
+    return {
+      GästeListen: veranstaltungen,
+      GasteListen_id: gaestelistenid
+    }
+    ;
   } catch (error) {
     console.error(error);
     process.exit(-1);
+  } finally {
+    client.close();
   }
-
-  const dbo = client.db('DatenBank');
-  gaestelisten = await dbo.collection('GästeListen').find().toArray();
-  gaestelisten.forEach(Element => {
-    Object.entries(Element).forEach(([keys, values]) => {
-      if (keys === '_id') {
-        const id = JSON.stringify(values);
-        gaestelistenid.push(id.substring(1, id.length - 1));
-      }
-    });
-  });
-
-  return {
-    GästeListen: veranstaltungen,
-    GasteListen_id: gaestelistenid
-  }
-  ;
 }
 let sitzplaene = [];
-const sitzplaeneid = [];
+let sitzplaeneid = [];
 async function getAllSitzpläne () {
   let client = null;
   try {
     client = new MongoClient('mongodb://localhost:27017');
     await client.connect();
+    const dbo = client.db('DatenBank');
+    sitzplaene = await dbo.collection('Sitzpläne').find().toArray();
+    sitzplaeneid = [];
+    sitzplaene.forEach(Element => {
+      Object.entries(Element).forEach(([keys, values]) => {
+        if (keys === '_id') {
+          const id = JSON.stringify(values);
+
+          sitzplaeneid.push(id.substring(1, id.length - 1));
+        }
+      });
+    });
+    return {
+      Sitzpläne: sitzplaene,
+      Sitzpläne_id: sitzplaeneid
+    };
   } catch (error) {
     console.error(error);
     process.exit(-1);
+  } finally {
+    client.close();
   }
-
-  const dbo = client.db('DatenBank');
-  sitzplaene = await dbo.collection('Sitzpläne').find().toArray();
-  sitzplaene.forEach(Element => {
-    Object.entries(Element).forEach(([keys, values]) => {
-      if (keys === '_id') {
-        const id = JSON.stringify(values);
-        sitzplaeneid.push(id.substring(1, id.length - 1));
-      }
-    });
-  });
-
-  return {
-    Sitzpläne: sitzplaene,
-    Sitzpläne_id: sitzplaeneid
-  }
-  ;
 }
 (async function () { await getAllGästelisten(); })();
 (async function () { await getAllVeranstaltunegn(); })();
@@ -247,7 +253,6 @@ router.put('/gaestelisten/:id', (request, response) => {
       }
     }
     let client = null;
-    console.log(JSON.stringify(request.body));
     (async function () {
       const vname = gl.veranstaltungsname;
       try {
@@ -320,12 +325,13 @@ function createglListBody () {
 router.get('/sitzplaene', (request, response) => {
   (async function () {
     await getAllSitzpläne();
+    if (sitzplaene) {
+      const res = await createSPListBody();
+      response.json(res);
+    }
   })();
-  if (sitzplaene) {
-    response.json(createSPListBody());
-  }
 });
-function createSPListBody () {
+async function createSPListBody () {
   (async function () {
     await getAllSitzpläne();
   })();
@@ -348,16 +354,17 @@ function createSPListBody () {
   };
 }
 
-router.get('/veranstaltungen/:id', (request, response) => {
+router.get('/veranstaltungen/:id', async (request, response) => {
+  await getAllVeranstaltunegn();
   const id = request.params.id;
 
   if (!versId.includes(id)) {
     response.sendStatus(404);
   } else {
-    response.json(createVerBody(id));
+    response.json(await createVerBody(id));
   }
 });
-function createVerBody (id) {
+async function createVerBody (id) {
   (async function () {
     await getAllVeranstaltunegn();
   })();
@@ -430,16 +437,17 @@ function createglBody (id) {
     }
   };
 }
-router.get('/sitzplaene/:id', (request, response) => {
+router.get('/sitzplaene/:id', async (request, response) => {
   const id = request.params.id;
+  await getAllSitzpläne();
 
   if (!sitzplaeneid.includes(id)) {
     response.sendStatus(404);
   } else {
-    response.json(createSPBody(id));
+    response.json(await createSPBody(id));
   }
 });
-function createSPBody (id) {
+async function createSPBody (id) {
   (async function () {
     await getAllSitzpläne();
   })();
@@ -472,9 +480,12 @@ function createSPBody (id) {
   };
 }
 
-server.delete('/veranstaltungen/:id', (request, response) => {
+server.delete('/veranstaltungen/:id', async (request, response) => {
   const id = request.params.id;
+  await getAllVeranstaltunegn();
   if (!versId.includes(id)) {
+    console.log('hier');
+    console.log(versId);
     response.sendStatus(404);
   } else {
     let vername = '';
@@ -557,7 +568,6 @@ server.delete('/gaestelisten/:id', (request, response) => {
 
 server.delete('/sitzplaene/:id', (request, response) => {
   const id = request.params.id;
-  console.log(sitzplaeneid);
   if (!sitzplaeneid.includes(id)) {
     response.sendStatus(404);
   } else {
@@ -604,6 +614,7 @@ server.delete('/sitzplaene/:id', (request, response) => {
 });
 
 router.put('/sitzplaene/:id', (req, res) => {
+  getAllSitzpläne();
   const id = req.params.id;
   if (!sitzplaeneid.includes(id)) {
     res.sendStatus(404);
@@ -617,7 +628,6 @@ router.put('/sitzplaene/:id', (req, res) => {
       }
     }
     let client = null;
-    console.log(JSON.stringify(req.body));
     (async function () {
       const vname = sp.veranstaltungsname;
       client = new MongoClient('mongodb://localhost:27017');

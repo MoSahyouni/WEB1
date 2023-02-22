@@ -49,15 +49,12 @@ function GaestePlatzZuordnen () {
           } else {
             const SpsReq = await window.fetch('/sitzplaene');
             const sps = await SpsReq.json();
-            console.log(sps);
-
             const spList = sps.Sitzpläne;
-            console.log(spList);
             spList.map(element => (async function () {
               if (element.veranstaltungsname === ver.name) {
                 const ef = await window.fetch(element.href);
                 const e = await ef.json();
-                console.log('ee ', e);
+
                 spId = JSON.stringify(e.Sitzplan._id).substring(1, JSON.stringify(e.Sitzplan._id).length - 1);
               }
             })());
@@ -337,9 +334,8 @@ function GaestePlatzZuordnen () {
     const SaveZuordnungBTN = document.createElement('button');
     SaveZuordnungBTN.innerText = 'Zuordnung Speichern';
     SaveZuordnungBTN.setAttribute('id', 'zuordSpeichern');
-    SaveZuordnungBTN.addEventListener('click', function () {
-      console.log('fetching......' + veranstalungName);
-      fechtGastPlaetzeZuordnung(gaestelist, plgastordnerlist, rTische, sitzeProTisch, bestuhlung, veranstalungName);
+    SaveZuordnungBTN.addEventListener('click', async function () {
+      await fechtGastPlaetzeZuordnung(gaestelist, plgastordnerlist, rTische, sitzeProTisch, bestuhlung, veranstalungName);
     });
     mylist.appendChild(SaveZuordnungBTN);
   }

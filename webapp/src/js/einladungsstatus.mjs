@@ -17,7 +17,6 @@ function EinladungStatusBearbeiten () {
   let versitzplan = null;
   let GaesteList = null;
   let listSpace = null;
-  let verId = null;
   let GLId = null;
   const checkBtn = document.getElementById('btnJSON');
   checkBtn.addEventListener('click', function () {
@@ -34,19 +33,15 @@ function EinladungStatusBearbeiten () {
           veri = vers[i];
           versitzplan = veri.Sitzplan;
           GaesteList = veri.gaestelist;
-          verId = JSON.stringify(veri._id).substring(1, JSON.stringify(veri._id).length - 1);
         }
       }
       const glsReq = await window.fetch('/gaestelisten');
       const gls = await glsReq.json();
-      console.log(gls);
       const glList = gls.gaestelisten;
-      console.log(glList);
       glList.map(element => (async function () {
         if (element.veranstaltungsname === veri.name) {
           const ef = await window.fetch(element.href);
           const e = await ef.json();
-          console.log('ee ', e);
           GLId = JSON.stringify(e.gaestelisten._id).substring(1, JSON.stringify(e.gaestelisten._id).length - 1);
         }
       })());
@@ -87,7 +82,6 @@ function EinladungStatusBearbeiten () {
         }
       }
       versitzplan.gästezuordnung = sitzplanZuordnung;
-      console.log(verId);
       const fetchbody = JSON.stringify({ Gastelist: GaesteList, sitzplan: versitzplan });
       (async function () {
         window.fetch(`/gaestelisten/${GLId}`, {
@@ -184,7 +178,7 @@ function EinladungStatusBearbeiten () {
 
     let anzitemproSeite = parseInt(wHeight / parseInt(blockHeight));
     if (anzitemproSeite <= 0) { anzitemproSeite = 1; }
-    if (anzitemproSeite >= 16) { anzitemproSeite = 15; }
+    if (anzitemproSeite >= 15) { anzitemproSeite = 14; }
     let anzpages = 0;
     if (parseInt(gl.length / anzitemproSeite) <= 0) { anzpages = 1; } else { anzpages = parseInt(gl.length / anzitemproSeite); }
     if (anzpages <= 0) { anzpages = gl.length; }

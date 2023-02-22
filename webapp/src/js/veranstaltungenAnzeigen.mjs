@@ -71,7 +71,6 @@ function veranstaltungenPrint (veranstaltungen, myDiv) {
   if (anzpages * anzitemproSeite < veranstaltungen.length) { anzpages++; }
   if (anzpages > veranstaltungen.length) { anzpages = veranstaltungen.length; }
   if (aktuellSeiteGL > anzpages) { aktuellSeiteGL = anzpages; }
-  console.log(anzitemproSeite);
   if (aktuellSeiteGL !== 1) { printgl(aktuellSeiteGL, veranstaltungen, mylist, anzitemproSeite); } else {
     aktuellSeiteGL = 1;
     printgl(aktuellSeiteGL, veranstaltungen, mylist, anzitemproSeite);
@@ -110,9 +109,7 @@ function veranstaltungenPrint (veranstaltungen, myDiv) {
 }
 
 function printgl (pageNr, vl, mylist, anzitemproSeite) {
-  console.log('gl :', vl);
   for (let n = (pageNr - 1) * anzitemproSeite; n < vl.length && n < pageNr * anzitemproSeite; n++) {
-    console.log(n);
     const v = vl[n];
 
     const obj = document.createElement('li');
@@ -140,7 +137,7 @@ function veranstaltunglöschenUndLoschenBtn (verlist, htmlspace) {
   loschenBtn.innerText = 'loeschen';
   loschenBtn.setAttribute('id', 'verLoschenVA');
   htmlspace.appendChild(loschenBtn);
-  loschenBtn.addEventListener('click', function () {
+  loschenBtn.addEventListener('click', async function () {
     const vername = verName.value;
     for (let i = 0; i < verlist.length; i++) {
       const elem = verlist[i];
@@ -149,7 +146,7 @@ function veranstaltunglöschenUndLoschenBtn (verlist, htmlspace) {
       }
     }
     if (verId === null) { window.alert('Name nicht richtig'); } else {
-      (async function () {
+      await (async function () {
         await window.fetch(`/veranstaltungen/${verId}`, {
           method: 'DELETE',
           headers: {
