@@ -160,32 +160,59 @@ input[required] {
   width: 100%;
   height: 4em;
 }
+
+
+
 #btnJSON {
-  width: 100%;
-  padding: 0px;
-  border-radius: 10px;
-}
-input[type="submit"] {
-  background-color: #4CAF50;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 5px;
-  border: none;
-  cursor: pointer;
-}
-input[type="submit"]:hover {
-  background-color: #77d186;
-}
-input[type="text"],
-select,
-#verZeit {
-  width: 100%;
-  height: 40px;
-  padding: 10px;
-  font-size: 16px;
-  box-sizing: border-box;
-  border: 1px solid #551701;
-  border-radius: 10px;
+  width:100%;
+ }
+ #btnJSON,
+ #btnJSON_Zuordnen {
+  background-color:#4CAF48;
+  padding:10px;
+  border:none;
+  cursor:pointer;
+ }
+ #btnJSON:hover,
+ #btnJSON_Zuordnen:hover {
+  background-color:#6ec071;
+ }
+ #SitzplanTische,
+ #neugastname,
+ #plaetzeProTisch,
+ #vaeranstaltungsname,
+ #verZeit,
+ #vernname,
+ input,
+ select {
+  width:100%;
+  height: 40%;
+  padding:3px;
+  height:40px;
+  border-radius:15px;
+  border:1px solid black;
+  font-size:18px;
+ }
+
+ .Maingastelisterstellen #gastname{
+  width:100%;
+  height: 40%;
+  padding:3px;
+  height:40px;
+  border-radius:15px;
+  border:1px solid black;
+  font-size:18px;
+ }
+
+#neugasteinladung,
+#neugastkind,
+#neugastname,
+#gastkind,
+#vaeranstaltungsname,
+#gasteinladung,
+#gastname
+{
+   box-sizing:border-box;
 }
 li {
   margin-bottom: 8px;
@@ -258,6 +285,7 @@ input:hover,
 }
 #gbearbeitendiv #gastspeichern {
   width: 50%;
+  margin-left: 25%;
 }
 #gastkind {
   height: 4em;
